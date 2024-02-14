@@ -4,7 +4,9 @@
 
 The proposed application aims to assist hosts or event managers
 in efficiently managing the guest list for a specific event, 
-including monitoring RSVP statuses. My inspiration for this
+including monitoring RSVP statuses. 
+
+My inspiration for this
 project comes from my upbringing in a large family where my 
 mother frequently hosted various events. Recognizing the challenges
 of organizing and tracking guests for these gatherings, I see the 
@@ -17,7 +19,7 @@ process for a wide range of events.
 ## User Stories:
 - As a user, I want to be able to add a guest to my party
 - As a user, I want to be able to view the list of guests invited to my party
-- As a user, I want to be able to update the RSVP status of a guest
+- As a user, I want to be able to update the RSVP status and plus one status of a guest
 - As a user, I want to be able to remove a guest from my party
 - As a user, I want to be able to see the list of guests that are attending
   my party and the list of guests that are not
