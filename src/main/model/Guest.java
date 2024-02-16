@@ -36,5 +36,11 @@ public class Guest {
         this.plusOne = updatedPlusOne;
     }
 
+    @Override
+    public String toString() {
+        return "Guest: " + name + "   " + "Plus One Status = "
+                + plusOne + "   " + "RSVP Status = " + rsvpStatus;
+    }
+
 
 }
