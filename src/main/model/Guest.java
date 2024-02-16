@@ -42,5 +42,13 @@ public class Guest {
                 + plusOne + "   " + "RSVP Status = " + rsvpStatus;
     }
 
+    public boolean setStatusToBoolean(String status) {
+
+        if (status.equals("y")) {
+            return true;
+        }
+        return false;
+    }
+
 
 }

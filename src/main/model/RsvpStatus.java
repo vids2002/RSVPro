@@ -30,7 +30,10 @@ public class RsvpStatus {
 
     //EFFECTS: returns the list of confirmed guests
     public List<Guest> getConfirmedGuests() {
-        return confirmedGuests;
+        if (confirmedGuests.size() > 0) {
+            return confirmedGuests;
+        }
+        return null;
     }
 
     //EFFECTS: returns the number of confirmed guests
@@ -40,12 +43,45 @@ public class RsvpStatus {
 
     //EFFECTS: returns the list of declined guests
     public List<Guest> getDeclinedGuests() {
-        return declinedGuests;
+        if (declinedGuests.size() > 0) {
+            return declinedGuests;
+        }
+        return null;
     }
 
     //EFFECTS: returns the number of denied guests
     public int getNumOfDeclinedGuests() {
         return getDeclinedGuests().size();
+    }
+
+    //EFFECTS: returns a confirmed guest with given name
+    public Guest findConfirmedGuest(String name) {
+        for (Guest guest: confirmedGuests) {
+            if (guest.getName().equals(name)) {
+                return guest;
+            }
+        }
+        return null;
+    }
+
+    //EFFECTS: returns a declined guest with given name
+    public Guest findDeclinedGuest(String name) {
+        for (Guest guest: declinedGuests) {
+            if (guest.getName().equals(name)) {
+                return guest;
+            }
+        }
+        return null;
+    }
+
+    //EFFECTS: removes a guest from the two lists
+    public void removeCGuests(Guest guest) {
+        confirmedGuests.remove(guest);
+    }
+
+    //EFFECTS: removes a guest from the two lists
+    public void removeDGuests(Guest guest) {
+        declinedGuests.remove(guest);
     }
 
 

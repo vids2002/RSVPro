@@ -61,4 +61,27 @@ public class GuestList {
         }
         return rsvpStatus;
     }
+
+
+    //EFFECTS: template for finding a guest
+    public Guest findGuest(List<Guest> guests, String name) {
+        for (Guest guest : guests) {
+            if (guest.getName().equals(name)) {
+                return guest;
+            }
+        }
+        return null;
+    }
+
+    //EFFECTS: displays the guest list with appropriate information
+    //         as of now, program can view invited, confirmed and declined guests
+    public void displayGuestList(List<Guest> guests, String emptyListMessage) {
+        if (guests != null && !guests.isEmpty()) {
+            for (Guest guest : guests) {
+                System.out.println(guest);
+            }
+        } else {
+            System.out.println(emptyListMessage);
+        }
+    }
 }

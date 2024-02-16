@@ -2,6 +2,7 @@ package ui;
 
 import model.Guest;
 import model.GuestList;
+import model.RsvpStatus;
 
 import java.sql.SQLOutput;
 import java.util.List;
@@ -11,6 +12,9 @@ import java.util.Scanner;
 public class GuestListApp {
     private Scanner input;
     private GuestList guestList;
+    private RsvpStatus confirmedGuestList;
+    private RsvpStatus declinedGuestList;
+    private Guest guest;
 
     private boolean keepGoing = true;
     private boolean returnToMain = true;
@@ -22,7 +26,7 @@ public class GuestListApp {
 
     //MODIFIES: this
     //EFFECTS: processes the user input
-    private void runGuestListApp() {
+    public void runGuestListApp() {
         String command;
 
         init();
@@ -46,7 +50,7 @@ public class GuestListApp {
 
     //MODIFIES: this
     //EFFECTS: processes user command
-    private void processCommand(String command) {
+    public void processCommand(String command) {
         if (command.equals("e")) {
             editMenuFunctions();
         } else if (command.equals("v")) {
@@ -55,11 +59,9 @@ public class GuestListApp {
     }
 
     //EFFECTS: allows user to access edit menu
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
-    private void editMenuFunctions() {
+    public void editMenuFunctions() {
         String command;
 
-        init();
         keepGoing = true;
 
         while (keepGoing) {
@@ -88,10 +90,8 @@ public class GuestListApp {
 
 
     //EFFECTS: allows user to access view menu
-    private void editViewFunctions() {
+    public void editViewFunctions() {
         String command;
-
-        init();
         keepGoing = true;
 
         while (keepGoing) {
@@ -116,18 +116,9 @@ public class GuestListApp {
         }
     }
 
-    private void doDeclinedGuestList() {
-    }
-
-    private void doConfirmedGuestList() {
-    }
-
-    private void doInvitedGuestList() {
-    }
-
     //MODIFIES: this, keepGoing
     //EFFECTS: asks the user if they want to perform any more actions
-    private void doAnythingElse() {
+    public void doAnythingElse() {
         boolean inValidInput = true;
 
         while (inValidInput) {
@@ -150,13 +141,15 @@ public class GuestListApp {
         }
     }
 
+
+    //MODIFIES: this
     //EFFECTS: adds a guest with given name, given plus one status and false RSVP Status
     private void doAddGuests() {
         boolean plusOne = false;
 
         //prompt for guests' name
         System.out.println("Please enter guest's name");
-        String name = input.nextLine().trim();
+        String name = input.nextLine().trim().toLowerCase();
 
         while (keepGoing) {
             //prompt for guests' initial plus one status when sending invite
@@ -182,23 +175,120 @@ public class GuestListApp {
         //print out the guest that was added
         System.out.println("The following guest was added to the Guest List:");
         System.out.println(newGuest);
+
+        System.out.println(guestList.getListOfGuests());
     }
 
-    private void doChangeRsvpStatus() {
+    //MODIFIES: this
+    //EFFECTS: removes a guest with given name
+    private void doRemoveGuests() {
+
+        //prompt for guest to remove's name
+        System.out.println("Who would you like to remove from the Guest List?");
+        String nameToRemove = input.nextLine().trim().toLowerCase();
+
+        //finding the guest with given name
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+        Guest guestToRemove = guestList.findGuest(invitedGuests, nameToRemove);
+        //finding the guest with given name in Confirmed Guest List
+        Guest confirmedGToRemove = confirmedGuestList.findConfirmedGuest(nameToRemove);
+        //finding the guest with given name in Confirmed Guest List
+        Guest declinedGToRemove = declinedGuestList.findDeclinedGuest(nameToRemove);
+
+        //removing the guest with given name
+        if (guestToRemove != null) {
+            guestList.removeGuest(guestToRemove);
+            System.out.println(nameToRemove + " was successfully removed from the Guest List");
+            if (confirmedGToRemove != null) {
+                confirmedGuestList.removeCGuests(guestToRemove);
+            } else if (declinedGToRemove != null) {
+                declinedGuestList.removeDGuests(guestToRemove);
+            }
+        } else {
+            System.out.println("That guest is not on the list. Please verify spellings.");
+        }
     }
 
     private void doChangePOStatus() {
+
+        //prompt for guest to change PO status
+        System.out.println("Who's Plus One Status would you like to change?");
+        String nameToChange = input.nextLine().trim().toLowerCase();
+        //prompt for status of Plus One
+        System.out.println("What do you want to change the plus one status to?"
+                + "\nY to allow a plus one and n to deny a plus one");
+        String statusToChange = input.nextLine().trim().toLowerCase();
+        Boolean updatedStatus = guest.setStatusToBoolean(statusToChange);
+
+        //finding the guest with given name
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+        Guest guestToChange = guestList.findGuest(invitedGuests, nameToChange);
+
+        //changing the PO Status of given guest
+        if (guestToChange != null) {
+            guestToChange.setPlusOne(updatedStatus);
+            System.out.println("PlusOneStatus was update successfully");
+        } else {
+            System.out.println("That guest is not on the list. Please verify spellings.");
+        }
+        System.out.println(guestList.getListOfGuests());
     }
 
-    private void doRemoveGuests() {
+
+    private void doChangeRsvpStatus() {
+        //prompt for guest to change RSVP status
+        System.out.println("Who's RSVP Status would you like to change?");
+        String nameToChange = input.nextLine().trim().toLowerCase();
+        //prompt for status of RSVP
+        System.out.println("What do you want to change the RSVP status to?"
+                + "\nY for accepted invitation and N for declined invitation");
+        String statusToChange = input.nextLine().trim().toLowerCase();
+        Boolean updatedStatus = guest.setStatusToBoolean(statusToChange);
+
+        //finding the guest with given name
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+        Guest guestToChange = guestList.findGuest(invitedGuests, nameToChange);
+
+        //changing the RSVP Status of given guest
+        if (guestToChange != null) {
+            guestToChange.setRsvpStatus(updatedStatus);
+            if (updatedStatus) {
+                confirmedGuestList.addConfirmedGuests(guestToChange);
+                System.out.println(confirmedGuestList.getConfirmedGuests());
+            } else {
+                declinedGuestList.addDeclinedGuests(guestToChange);
+                System.out.println(declinedGuestList.getDeclinedGuests());
+            }
+            System.out.println("RSVP status was updated successfully");
+        } else {
+            System.out.println("That guest is not on the list. Please verify spellings.");
+        }
+        System.out.println(guestList.getListOfGuests());
     }
 
+    public void doInvitedGuestList() {
+        System.out.println(guestList.getListOfGuests());
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+        guestList.displayGuestList(invitedGuests, "The Guest List is empty right now");
+    }
 
+    public void doConfirmedGuestList() {
+        List<Guest> confirmedGuests = confirmedGuestList.getConfirmedGuests();
+        guestList.displayGuestList(confirmedGuests, "No one has confirmed an invite yet.");
+    }
+
+    public void doDeclinedGuestList() {
+        List<Guest> declinedGuests = declinedGuestList.getDeclinedGuests();
+        guestList.displayGuestList(declinedGuests, "No one has declined an invite yet.");
+    }
 
     //MODIFIES: this
     //EFFECTS: initializes the input variable
     private void init() {
         guestList = new GuestList();
+        confirmedGuestList = new RsvpStatus();
+        declinedGuestList = new RsvpStatus();
+        guest = new Guest("Mimi", false, false);
         input = new Scanner(System.in);
     }
 
