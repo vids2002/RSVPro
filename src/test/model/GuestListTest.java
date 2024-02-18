@@ -117,6 +117,13 @@ public class GuestListTest {
         assertEquals(guest1, testGuestList.findGuest(testGuestList.getListOfGuests(), "David"));
         assertEquals(guest5, testGuestList.findGuest(testGuestList.getListOfGuests(), "Katy"));
 
+        assertNull(testGuestList.findGuest(testGuestList.getListOfGuests(), "Vidoodle"));
+
+    }
+
+    @Test
+    public void testFindGuestEmptyList() {
+        assertNull(testGuestList.findGuest(testGuestList.getListOfGuests(), "Alice"));
     }
 
 
