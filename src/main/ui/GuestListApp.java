@@ -59,6 +59,7 @@ public class GuestListApp {
     }
 
     //EFFECTS: allows user to access edit menu
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public void editMenuFunctions() {
         String command;
 
@@ -76,6 +77,8 @@ public class GuestListApp {
                 doChangePOStatus();
             } else if (command.equals("c")) {
                 doChangeRsvpStatus();
+            } else if (command.equals("l")) {
+                doClearListOfGuests();
             } else if (command.equals("m")) {
                 keepGoing = false;
                 returnToMain = true;
@@ -87,7 +90,6 @@ public class GuestListApp {
             doAnythingElse();
         }
     }
-
 
     //EFFECTS: allows user to access view menu
     public void editViewFunctions() {
@@ -104,6 +106,8 @@ public class GuestListApp {
                 doConfirmedGuestList();
             } else if (command.equals("d")) {
                 doDeclinedGuestList();
+            } else if (command.equals("v")) {
+                doViewGuest();
             } else if (command.equals("m")) {
                 keepGoing = false;
                 returnToMain = true;
@@ -141,7 +145,6 @@ public class GuestListApp {
         }
     }
 
-
     //MODIFIES: this
     //EFFECTS: adds a guest with given name, given plus one status and false RSVP Status
     private void doAddGuests() {
@@ -173,10 +176,8 @@ public class GuestListApp {
         guestList.addGuest(newGuest);
 
         //print out the guest that was added
-        System.out.println("The following guest was added to the Guest List:");
+        System.out.println("The following guest was successfully added to the Guest List:");
         System.out.println(newGuest);
-
-        System.out.println(guestList.getListOfGuests());
     }
 
     //MODIFIES: this
@@ -198,7 +199,9 @@ public class GuestListApp {
         //removing the guest with given name
         if (guestToRemove != null) {
             guestList.removeGuest(guestToRemove);
-            System.out.println(nameToRemove + " was successfully removed from the Guest List");
+            String editNameToRemove = nameToRemove.substring(0,1).toUpperCase()
+                    + nameToRemove.substring(1).toLowerCase();
+            System.out.println(editNameToRemove + " was successfully removed from the Guest List");
             if (confirmedGToRemove != null) {
                 confirmedGuestList.removeCGuests(guestToRemove);
             } else if (declinedGToRemove != null) {
@@ -209,6 +212,8 @@ public class GuestListApp {
         }
     }
 
+    // MODIFIES: this
+    //EFFECTS: Changes the Plus One Status of required guest
     private void doChangePOStatus() {
 
         //prompt for guest to change PO status
@@ -227,14 +232,17 @@ public class GuestListApp {
         //changing the PO Status of given guest
         if (guestToChange != null) {
             guestToChange.setPlusOne(updatedStatus);
-            System.out.println("PlusOneStatus was update successfully");
+            String editName = nameToChange.substring(0,1).toUpperCase()
+                    + nameToChange.substring(1).toLowerCase();
+            System.out.println("Plus One Status of " + editName + " was successfully updated");
+            System.out.println(guestToChange);
         } else {
             System.out.println("That guest is not on the list. Please verify spellings.");
         }
-        System.out.println(guestList.getListOfGuests());
     }
 
-
+    //MODIFIES this
+    //EFFECTS: changes the RSVP Status of required guest
     private void doChangeRsvpStatus() {
         //prompt for guest to change RSVP status
         System.out.println("Who's RSVP Status would you like to change?");
@@ -249,34 +257,43 @@ public class GuestListApp {
         List<Guest> invitedGuests = guestList.getListOfGuests();
         Guest guestToChange = guestList.findGuest(invitedGuests, nameToChange);
 
-        //changing the RSVP Status of given guest
+        //changing the RSVP Status of given guest (in the invited, confirmed and declined guests' lists.
         if (guestToChange != null) {
             guestToChange.setRsvpStatus(updatedStatus);
             if (updatedStatus) {
                 confirmedGuestList.addConfirmedGuests(guestToChange);
-                System.out.println(confirmedGuestList.getConfirmedGuests());
             } else {
                 declinedGuestList.addDeclinedGuests(guestToChange);
-                System.out.println(declinedGuestList.getDeclinedGuests());
             }
-            System.out.println("RSVP status was updated successfully");
+            String editName = nameToChange.substring(0,1).toUpperCase()
+                    + nameToChange.substring(1).toLowerCase();
+            System.out.println("RSVP Status of " + editName + " was successfully updated");
+            System.out.println(guestToChange);
         } else {
             System.out.println("That guest is not on the list. Please verify spellings.");
         }
-        System.out.println(guestList.getListOfGuests());
     }
 
+    //MODIFIES: this
+    //EFFECTS: Initializes the program so that GuestList is now empty
+    private void doClearListOfGuests() {
+        init();
+        System.out.println("The Guest List is now empty");
+    }
+
+    //EFFECTS: gets the list of invited guests
     public void doInvitedGuestList() {
-        System.out.println(guestList.getListOfGuests());
         List<Guest> invitedGuests = guestList.getListOfGuests();
         displayGuestList(invitedGuests, "The Guest List is empty right now");
     }
 
+    //EFFECTS: gets the list of confirmed guests
     public void doConfirmedGuestList() {
         List<Guest> confirmedGuests = confirmedGuestList.getConfirmedGuests();
         displayGuestList(confirmedGuests, "No one has confirmed an invite yet.");
     }
 
+    //EFFECTS: gets the list of declined guests
     public void doDeclinedGuestList() {
         List<Guest> declinedGuests = declinedGuestList.getDeclinedGuests();
         displayGuestList(declinedGuests, "No one has declined an invite yet.");
@@ -291,6 +308,22 @@ public class GuestListApp {
             }
         } else {
             System.out.println(emptyListMessage);
+        }
+    }
+
+    //EFFECTS: Views the information of required guest
+    private void doViewGuest() {
+        System.out.println("Which Guest's information would you like to view?");
+        String guestToView = input.nextLine().trim().toLowerCase();
+
+
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+        Guest viewGuest = guestList.findGuest(invitedGuests, guestToView);
+
+        if (viewGuest != null) {
+            System.out.println(viewGuest);
+        } else {
+            System.out.println("That guest is not on the list. Please verify spellings");
         }
     }
 
@@ -319,6 +352,7 @@ public class GuestListApp {
         System.out.println("\tR -> Remove Guest");
         System.out.println("\tP -> Change Plus One Status of Guest");
         System.out.println("\tC -> Change RSVP Status of Guest");
+        System.out.println("\tL -> Clear the Guest List");
         System.out.println("\tM -> Return to Main Menu");
     }
 
@@ -328,8 +362,8 @@ public class GuestListApp {
         System.out.println("\tI -> View List of Guests Invited");
         System.out.println("\tC -> View List of Confirmed Guests");
         System.out.println("\tD -> View List of Declined Guests");
+        System.out.println("\tV -> View a Guest's Information");
         System.out.println("\tM -> Return to Main Menu");
     }
-
 
 }

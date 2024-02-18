@@ -38,7 +38,8 @@ public class Guest {
 
     @Override
     public String toString() {
-        return "Guest: " + name + "   " + "Plus One Status = "
+        return "Guest: " + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase()
+                + "   " + "Plus One Status = "
                 + plusOne + "   " + "RSVP Status = " + rsvpStatus;
     }
 
