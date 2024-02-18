@@ -126,6 +126,11 @@ public class GuestListTest {
         assertNull(testGuestList.findGuest(testGuestList.getListOfGuests(), "Alice"));
     }
 
+    @Test
+    public void testFindGuestWithNullList() {
+        assertNull(testGuestList.findGuest(null, "Alice"));
+    }
+
 
 
 }

@@ -75,16 +75,4 @@ public class GuestList {
         }
         return null;
     }
-
-    //EFFECTS: displays the guest list with appropriate information
-    //         as of now, program can view invited, confirmed and declined guests
-    public void displayGuestList(List<Guest> guests, String emptyListMessage) {
-        if (guests != null && !guests.isEmpty()) {
-            for (Guest guest : guests) {
-                System.out.println(guest);
-            }
-        } else {
-            System.out.println(emptyListMessage);
-        }
-    }
 }

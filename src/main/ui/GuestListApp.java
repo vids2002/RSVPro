@@ -269,17 +269,29 @@ public class GuestListApp {
     public void doInvitedGuestList() {
         System.out.println(guestList.getListOfGuests());
         List<Guest> invitedGuests = guestList.getListOfGuests();
-        guestList.displayGuestList(invitedGuests, "The Guest List is empty right now");
+        displayGuestList(invitedGuests, "The Guest List is empty right now");
     }
 
     public void doConfirmedGuestList() {
         List<Guest> confirmedGuests = confirmedGuestList.getConfirmedGuests();
-        guestList.displayGuestList(confirmedGuests, "No one has confirmed an invite yet.");
+        displayGuestList(confirmedGuests, "No one has confirmed an invite yet.");
     }
 
     public void doDeclinedGuestList() {
         List<Guest> declinedGuests = declinedGuestList.getDeclinedGuests();
-        guestList.displayGuestList(declinedGuests, "No one has declined an invite yet.");
+        displayGuestList(declinedGuests, "No one has declined an invite yet.");
+    }
+
+    //EFFECTS: displays the guest list with appropriate information
+    //         as of now, program can view invited, confirmed and declined guests
+    public void displayGuestList(List<Guest> guests, String emptyListMessage) {
+        if (guests != null && !guests.isEmpty()) {
+            for (Guest guest : guests) {
+                System.out.println(guest);
+            }
+        } else {
+            System.out.println(emptyListMessage);
+        }
     }
 
     //MODIFIES: this
