@@ -44,4 +44,14 @@ public class GuestTest {
         testGuest.setPlusOne(true);
         assertTrue(testGuest.getPlusOne());
     }
+
+    @Test
+    public void testStatusToBoolean() {
+        assertTrue(testGuest.setStatusToBoolean("Y".toLowerCase()));
+        assertTrue(testGuest.setStatusToBoolean("y"));
+
+        assertFalse(testGuest.setStatusToBoolean("n"));
+        assertFalse(testGuest.setStatusToBoolean("N"));
+
+    }
 }

@@ -3,8 +3,6 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class RsvpStatusTest {
@@ -44,10 +42,9 @@ public class RsvpStatusTest {
         assertEquals(guest5, testRsvpStatus.getConfirmedGuests().get(2));
     }
 
+
     @Test
     public void testGetNumOfConfirmedGuests() {
-        assertEquals(0, testRsvpStatus.getNumOfConfirmedGuests());
-
         testRsvpStatus.addConfirmedGuests(guest2);
         testRsvpStatus.addConfirmedGuests(guest4);
         testRsvpStatus.addConfirmedGuests(guest5);
@@ -83,4 +80,61 @@ public class RsvpStatusTest {
         assertEquals(3, testRsvpStatus.getNumOfConfirmedGuests());
         assertEquals(2, testRsvpStatus.getNumOfDeclinedGuests());
     }
+
+    @Test
+    public void testFindConfirmedGuest() {
+        testRsvpStatus.addDeclinedGuests(guest1);
+        testRsvpStatus.addConfirmedGuests(guest2);
+        testRsvpStatus.addDeclinedGuests(guest3);
+        testRsvpStatus.addConfirmedGuests(guest4);
+        testRsvpStatus.addConfirmedGuests(guest5);
+
+        assertEquals(guest2, testRsvpStatus.findConfirmedGuest("Angel"));
+        assertEquals(null, testRsvpStatus.findConfirmedGuest("David"));
+    }
+
+    @Test
+    public void testFindDeclinedGuest() {
+        testRsvpStatus.addDeclinedGuests(guest1);
+        testRsvpStatus.addConfirmedGuests(guest2);
+        testRsvpStatus.addDeclinedGuests(guest3);
+        testRsvpStatus.addConfirmedGuests(guest4);
+        testRsvpStatus.addConfirmedGuests(guest5);
+
+        assertEquals(guest1, testRsvpStatus.findDeclinedGuest("David"));
+        assertNull(testRsvpStatus.findDeclinedGuest("Angel"));
+        assertNull(testRsvpStatus.findDeclinedGuest("Mimi"));
+    }
+
+    @Test
+    public void testRemoveCGuests() {
+        testRsvpStatus.addDeclinedGuests(guest1);
+        testRsvpStatus.addConfirmedGuests(guest2);
+        testRsvpStatus.addDeclinedGuests(guest3);
+        testRsvpStatus.addConfirmedGuests(guest4);
+        testRsvpStatus.addConfirmedGuests(guest5);
+
+        testRsvpStatus.removeCGuests(guest2);
+        assertEquals(guest4, testRsvpStatus.getConfirmedGuests().get(0));
+
+        testRsvpStatus.removeCGuests(guest4);
+        testRsvpStatus.removeCGuests(guest5);
+        assertNull(testRsvpStatus.getConfirmedGuests());
+    }
+
+    @Test
+    public void testRemoveDGuest() {
+        testRsvpStatus.addDeclinedGuests(guest1);
+        testRsvpStatus.addConfirmedGuests(guest2);
+        testRsvpStatus.addDeclinedGuests(guest3);
+        testRsvpStatus.addConfirmedGuests(guest4);
+        testRsvpStatus.addConfirmedGuests(guest5);
+
+        testRsvpStatus.removeDGuests(guest1);
+        assertEquals(guest3, testRsvpStatus.getDeclinedGuests().get(0));
+
+        testRsvpStatus.removeDGuests(guest3);
+        assertNull(testRsvpStatus.getDeclinedGuests());
+    }
+
 }

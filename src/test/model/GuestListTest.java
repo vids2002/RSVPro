@@ -106,6 +106,19 @@ public class GuestListTest {
     }
 
 
-    // TODO:  find guest list test!!
+    @Test
+    public void testFindGuest() {
+        testGuestList.addGuest(guest1);
+        testGuestList.addGuest(guest2);
+        testGuestList.addGuest(guest3);
+        testGuestList.addGuest(guest4);
+        testGuestList.addGuest(guest5);
+
+        assertEquals(guest1, testGuestList.findGuest(testGuestList.getListOfGuests(), "David"));
+        assertEquals(guest5, testGuestList.findGuest(testGuestList.getListOfGuests(), "Katy"));
+
+    }
+
+
 
 }

@@ -74,11 +74,13 @@ public class RsvpStatus {
         return null;
     }
 
+    //REQUIRES: the guest to already have confirmed (with an RSVP status of true)
     //EFFECTS: removes a guest from the two lists
     public void removeCGuests(Guest guest) {
         confirmedGuests.remove(guest);
     }
 
+    //REQUIRES: the guest to already have declined invitation (with an RSVP status of false)
     //EFFECTS: removes a guest from the two lists
     public void removeDGuests(Guest guest) {
         declinedGuests.remove(guest);
