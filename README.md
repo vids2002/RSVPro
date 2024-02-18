@@ -18,8 +18,10 @@ process for a wide range of events.
 
 ## User Stories:
 - As a user, I want to be able to add a guest to my party
-- As a user, I want to be able to view the list of guests invited to my party
-- As a user, I want to be able to update the RSVP status and plus one status of a guest
 - As a user, I want to be able to remove a guest from my party
-- As a user, I want to be able to see the list of guests that are attending
-  my party and the list of guests that are not
+- As a user, I want to be able to update the RSVP status and Plus One status of a guest
+- As a user, I want to be able to clear my whole Guest List
+- As a user, I want to be able to view the list of guests invited to my party
+- As a user, I want to be able to view the list of guests that have confirmed my invite
+  and a list of guests that have declined my invite. 
+- As a user, I want to be able to view details of a specific guest
