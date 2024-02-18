@@ -46,6 +46,12 @@ public class GuestTest {
     }
 
     @Test
+    public void testToString() {
+        String expected = "Guest: Mimi   Plus One Status = true   RSVP Status = false";
+        assertEquals(expected, testGuest.toString());
+    }
+
+    @Test
     public void testStatusToBoolean() {
         assertTrue(testGuest.setStatusToBoolean("Y".toLowerCase()));
         assertTrue(testGuest.setStatusToBoolean("y"));
