@@ -65,7 +65,7 @@ public class GuestList {
 
     //EFFECTS: template for finding a guest
     public Guest findGuest(List<Guest> guests, String name) {
-        if (guests != null && !guests.isEmpty()) {
+        if (guests != null) {
             for (Guest guest : guests) {
                 if (guest.getName().equals(name)) {
                     return guest;
