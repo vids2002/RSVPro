@@ -26,10 +26,7 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
-
-    //Pass through declined later
-
+    // EFFECTS: writes JSON representation of Guest List to file
     public void write(GuestList guestList, RsvpStatus confirmedGuests, RsvpStatus declinedGuests) {
         JSONObject json = new JSONObject();
         // Assuming toJson of GuestList and RsvpStatus returns a JSONObject with the respective data under specific keys
@@ -39,31 +36,7 @@ public class JsonWriter {
         json.put("declinedGuests", declinedGuests.toJson()); // Adjust if your structure is different.
 
         saveToFile(json.toString(TAB));
-
-//        JSONObject json = gl.toJson();
-//        saveToFile(json.toString(TAB));
-
-////         Repeat with confirmed/declined
-//        JSONObject toWrite = new JSONObject();
-//        JSONArray jsongl = gl.toJson();
-//        JSONArray jsonConfirmed = confirmed.toJson();
-//        saveToFile(jsongl.toString(TAB));
-//        saveToFile(jsonConfirmed.toString(TAB));
-//        toWrite.put("guests", gl);
-////        toWrite.put("confirmed", confirmed);
     }
-
-//    // MODIFIES: this
-//    // EFFECTS: writes JSON representation of workroom to file
-//    public void write(RsvpStatus rsvpConfirmed) {
-//
-//        JSONObject jsonC = rsvpConfirmed.toJson();
-////        JSONObject jsonD = rsvpDeclined.toJson();
-//
-//        saveToFile(jsonC.toString(TAB));
-////        saveToFile(jsonD.toString(TAB));
-//
-//    }
 
     // MODIFIES: this
     // EFFECTS: closes writer

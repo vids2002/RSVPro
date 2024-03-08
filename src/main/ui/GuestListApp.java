@@ -87,27 +87,37 @@ public class GuestListApp {
 
             if (command.equals("a")) {
                 doAddGuests();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("r")) {
                 doRemoveGuests();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("p")) {
                 doChangePOStatus();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("c")) {
                 doChangeRsvpStatus();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("l")) {
                 doClearListOfGuests();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("m")) {
                 keepGoing = false;
                 returnToMain = true;
-                continue;
             } else {
                 System.out.println("That's not a valid input");
-                continue;
+                keepGoing = true;
+                returnToMain = false;
             }
-            doAnythingElse();
         }
     }
 
     //EFFECTS: allows user to access view menu
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public void editViewFunctions() {
         String command;
         keepGoing = true;
@@ -118,45 +128,27 @@ public class GuestListApp {
 
             if (command.equals("i")) {
                 doInvitedGuestList();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("c")) {
                 doConfirmedGuestList();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("d")) {
                 doDeclinedGuestList();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("v")) {
                 doViewGuest();
+                keepGoing = true;
+                returnToMain = false;
             } else if (command.equals("m")) {
                 keepGoing = false;
                 returnToMain = true;
-                continue;
             } else {
                 System.out.println("That's not a valid input");
-                continue;
-            }
-            doAnythingElse();
-        }
-    }
-
-    //MODIFIES: this, keepGoing
-    //EFFECTS: asks the user if they want to perform any more actions
-    public void doAnythingElse() {
-        boolean inValidInput = true;
-
-        while (inValidInput) {
-            System.out.println("\nDo you want to do anything else?"
-                    + "\nY for yes or N for no");
-            String command;
-            command = input.nextLine().trim().toLowerCase();
-
-            if (command.equals("y")) {
                 keepGoing = true;
-                inValidInput = false;
-            } else if (command.equals("n")) {
-                System.out.println("Goodbye!");
-                keepGoing = false;
                 returnToMain = false;
-                inValidInput = false;
-            } else {
-                System.out.println("That's an Invalid Input");
             }
         }
     }
@@ -239,7 +231,7 @@ public class GuestListApp {
         System.out.println("What do you want to change the plus one status to?"
                 + "\nY to allow a plus one and n to deny a plus one");
         String statusToChange = input.nextLine().trim().toLowerCase();
-        Boolean updatedStatus = guest.setStatusToBoolean(statusToChange);
+        boolean updatedStatus = guest.setStatusToBoolean(statusToChange);
 
         //finding the guest with given name
         List<Guest> invitedGuests = guestList.getListOfGuests();
@@ -268,7 +260,7 @@ public class GuestListApp {
         System.out.println("What do you want to change the RSVP status to?"
                 + "\nY for accepted invitation and N for declined invitation");
         String statusToChange = input.nextLine().trim().toLowerCase();
-        Boolean updatedStatus = guest.setStatusToBoolean(statusToChange);
+        boolean updatedStatus = guest.setStatusToBoolean(statusToChange);
 
         //finding the guest with given name
         List<Guest> invitedGuests = guestList.getListOfGuests();
@@ -398,8 +390,6 @@ public class GuestListApp {
         try {
             jsonWriter.open();
             jsonWriter.write(guestList, confirmedGuestList, declinedGuestList);
-//            jsonWriterRsvp.write(confirmedGuestList);
-//            jsonWriter.write(declinedGuestList);
             jsonWriter.close();
             System.out.println("Guest List has successfully been saved to " + JSON_STORE);
         } catch (FileNotFoundException e) {
@@ -412,8 +402,6 @@ public class GuestListApp {
     private void loadGuestList() {
         try {
             jsonReader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
-//            confirmedGuestList = jsonReader.readRsvp();
-//            declinedGuestList = jsonReader.readRsvp();
             System.out.println("Successfully loaded Guest List from " + JSON_STORE);
         } catch (IOException e) {
             System.out.println("Unable to read from file: " + JSON_STORE);

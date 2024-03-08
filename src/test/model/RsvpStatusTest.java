@@ -139,11 +139,10 @@ public class RsvpStatusTest {
 
     @Test
     public void testRemoveCGuestsNotInList() {
-        // Attempt to remove a guest who was never added.
         Guest notAddedGuest = new Guest("NotAdded", false, false);
         testRsvpStatus.addConfirmedGuests(guest1); // Assuming guest1 is defined and added elsewhere.
 
-        // The size of the confirmed list should remain the same since the guest was not in it.
+
         int sizeBeforeRemove = testRsvpStatus.getConfirmedGuests().size();
         testRsvpStatus.removeCGuests(notAddedGuest);
         int sizeAfterRemove = testRsvpStatus.getConfirmedGuests().size();
@@ -152,12 +151,16 @@ public class RsvpStatusTest {
 
     @Test
     public void testRemoveDGuestNotInList() {
-        // Similar test for declined guests.
+        Guest guestToRemove = new Guest("Nonexistent", false, false);
+
+        assertNull(testRsvpStatus.getDeclinedGuests());
+        testRsvpStatus.removeDGuests(guestToRemove);
+
+        assertNull(testRsvpStatus.getDeclinedGuests());
     }
 
     @Test
     public void testRemoveCGuestsFromListWithOneGuest() {
-        // Add only one guest and then remove them.
         testRsvpStatus.addConfirmedGuests(guest1);
         testRsvpStatus.removeCGuests(guest1);
         assertNull(testRsvpStatus.getConfirmedGuests());
@@ -165,44 +168,33 @@ public class RsvpStatusTest {
 
     @Test
     public void testRemoveDGuestsFromListWithOneGuest() {
-        // Similar test for declined guests.
+        testRsvpStatus.addDeclinedGuests(guest1);
+        testRsvpStatus.removeDGuests(guest1);
+        assertNull(testRsvpStatus.getDeclinedGuests());
     }
 
     @Test
     public void testRemoveCGuestsDoesNotAffectDeclinedList() {
-        // Add guests to both lists.
+
         testRsvpStatus.addConfirmedGuests(guest2);
         testRsvpStatus.addDeclinedGuests(guest1);
 
-        // Remove a guest from the confirmed list.
         testRsvpStatus.removeCGuests(guest2);
 
-        // The declined list should not be affected.
         assertFalse(testRsvpStatus.getDeclinedGuests().isEmpty());
         assertEquals(guest1, testRsvpStatus.getDeclinedGuests().get(0));
     }
 
     @Test
-    public void testRemoveDGuestsEmptyList() {
-        // Attempt to remove a guest from an empty list.
-        Guest guestToRemove = new Guest("Nonexistent", false, false);
-        // Before removal, make sure the list is empty.
-        assertTrue(testRsvpStatus.getDeclinedGuests().isEmpty());
-        testRsvpStatus.removeDGuests(guestToRemove);
-        // The list should still be empty after removal attempt.
-        assertTrue(testRsvpStatus.getDeclinedGuests().isEmpty());
-    }
-
-    @Test
     public void testRemoveDGuestsNonexistentGuest() {
-        // Add some guests to the list.
+
         testRsvpStatus.addDeclinedGuests(new Guest("Existing", false, false));
-        // Attempt to remove a guest not in the list.
+
         Guest guestToRemove = new Guest("Nonexistent", false, false);
         int sizeBeforeRemove = testRsvpStatus.getDeclinedGuests().size();
         testRsvpStatus.removeDGuests(guestToRemove);
         int sizeAfterRemove = testRsvpStatus.getDeclinedGuests().size();
-        // The size should not change because the guest was not in the list.
+
         assertEquals(sizeBeforeRemove, sizeAfterRemove);
     }
 

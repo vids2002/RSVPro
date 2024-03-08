@@ -5,18 +5,39 @@
     },
     "confirmedGuests": {
         "declinedGuests": [],
-        "confirmedGuests": []
+        "confirmedGuests": [
+            {
+                "rsvpStatus": true,
+                "plusOne": true,
+                "name": "vids"
+            },
+            {
+                "rsvpStatus": true,
+                "plusOne": true,
+                "name": "dia"
+            },
+            {
+                "rsvpStatus": true,
+                "plusOne": true,
+                "name": "memes"
+            }
+        ]
     },
     "guestList": {"guests": [
         {
-            "rsvpStatus": false,
+            "rsvpStatus": true,
             "plusOne": true,
-            "name": "alice"
+            "name": "vids"
         },
         {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "vids"
+            "rsvpStatus": true,
+            "plusOne": true,
+            "name": "memes"
+        },
+        {
+            "rsvpStatus": true,
+            "plusOne": true,
+            "name": "dia"
         }
     ]}
 }

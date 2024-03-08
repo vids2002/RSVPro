@@ -15,10 +15,10 @@ public class GuestTest {
     }
 
     @Test
-    public void testContructor() {
+    public void testConstructor() {
         assertEquals("Mimi", testGuest.getName());
-        assertEquals(true, testGuest.getPlusOne());
-        assertEquals(false, testGuest.getRsvpStatus());
+        assertTrue( testGuest.getPlusOne());
+        assertFalse(testGuest.getRsvpStatus());
     }
 
     @Test
