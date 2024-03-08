@@ -183,8 +183,27 @@ public class RsvpStatusTest {
     }
 
     @Test
-    public void testRemoveDGuestsDoesNotAffectConfirmedList() {
-        // Similar test for ensuring removing a declined guest does not affect the confirmed list.
+    public void testRemoveDGuestsEmptyList() {
+        // Attempt to remove a guest from an empty list.
+        Guest guestToRemove = new Guest("Nonexistent", false, false);
+        // Before removal, make sure the list is empty.
+        assertTrue(testRsvpStatus.getDeclinedGuests().isEmpty());
+        testRsvpStatus.removeDGuests(guestToRemove);
+        // The list should still be empty after removal attempt.
+        assertTrue(testRsvpStatus.getDeclinedGuests().isEmpty());
+    }
+
+    @Test
+    public void testRemoveDGuestsNonexistentGuest() {
+        // Add some guests to the list.
+        testRsvpStatus.addDeclinedGuests(new Guest("Existing", false, false));
+        // Attempt to remove a guest not in the list.
+        Guest guestToRemove = new Guest("Nonexistent", false, false);
+        int sizeBeforeRemove = testRsvpStatus.getDeclinedGuests().size();
+        testRsvpStatus.removeDGuests(guestToRemove);
+        int sizeAfterRemove = testRsvpStatus.getDeclinedGuests().size();
+        // The size should not change because the guest was not in the list.
+        assertEquals(sizeBeforeRemove, sizeAfterRemove);
     }
 
 }
