@@ -33,7 +33,8 @@ public class JsonWriter {
     public void write(GuestList guestList, RsvpStatus confirmedGuests, RsvpStatus declinedGuests) {
         JSONObject json = new JSONObject();
         // Assuming toJson of GuestList and RsvpStatus returns a JSONObject with the respective data under specific keys
-        json.put("guestList", guestList.toJson()); // This assumes your guestList.toJson() method returns a structure where the guest list is already under a key like "guests".
+        json.put("guestList", guestList.toJson()); // This assumes your guestList.toJson() method returns a structure
+        // where the guest list is already under a key like "guests".
         json.put("confirmedGuests", confirmedGuests.toJson()); // Adjust if your structure is different.
         json.put("declinedGuests", declinedGuests.toJson()); // Adjust if your structure is different.
 
