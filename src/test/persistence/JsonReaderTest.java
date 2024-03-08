@@ -26,12 +26,12 @@ class JsonReaderTest extends JsonTest {
         JsonReader reader = new JsonReader("./data/testReaderEmptyGuestList.json");
         try {
             GuestList guestList = new GuestList();
-            RsvpStatus confirmed = new RsvpStatus();
-            RsvpStatus declined = new RsvpStatus();
-            reader.readApplicationState(guestList, confirmed, declined);
-            assertTrue(guestList.getListOfGuests().isEmpty());
-            assertTrue(confirmed.getConfirmedGuests().isEmpty());
-            assertTrue(declined.getDeclinedGuests().isEmpty());
+            RsvpStatus confirmedGuests = new RsvpStatus();
+            RsvpStatus declinedGuests = new RsvpStatus();
+            reader.readApplicationState(guestList, confirmedGuests, declinedGuests);
+            assertNull(guestList.getListOfGuests());
+            assertNull(confirmedGuests.getConfirmedGuests());
+            assertNull(declinedGuests.getDeclinedGuests());
         } catch (IOException e) {
             fail("Couldn't read from file");
         }
@@ -47,7 +47,7 @@ class JsonReaderTest extends JsonTest {
             RsvpStatus declined = new RsvpStatus();
             reader.readApplicationState(guestList, confirmed, declined);
             assertEquals(2, guestList.getListOfGuests().size());
-            checkGuest("Alice", true, false, guestList.getListOfGuests().get(0));
+            checkGuest("alice", true, false, guestList.getListOfGuests().get(0));
             // Add checks for confirmed and declined lists as needed
         } catch (IOException e) {
             fail("Couldn't read from file");

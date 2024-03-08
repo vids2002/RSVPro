@@ -41,9 +41,9 @@ class JsonWriterTest extends JsonTest {
 
             JsonReader reader = new JsonReader(filePath);
             reader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
-            assertTrue(guestList.getListOfGuests().isEmpty());
-            assertTrue(confirmedGuestList.getConfirmedGuests().isEmpty());
-            assertTrue(declinedGuestList.getDeclinedGuests().isEmpty());
+            assertNull(guestList.getListOfGuests());
+            assertNull(confirmedGuestList.getConfirmedGuests());
+            assertNull(declinedGuestList.getDeclinedGuests());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -68,7 +68,12 @@ class JsonWriterTest extends JsonTest {
             writer.write(guestList, confirmedGuestList, declinedGuestList);
             writer.close();
 
+            // Re-instantiate to ensure they are empty before reading
+            guestList = new GuestList();
+            confirmedGuestList = new RsvpStatus();
+            declinedGuestList = new RsvpStatus();
             JsonReader reader = new JsonReader(filePath);
+
             reader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
             assertEquals(2, guestList.getListOfGuests().size());
             checkGuest("Alice", true, false, guestList.getListOfGuests().get(0));

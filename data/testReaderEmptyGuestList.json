@@ -1,11 +1,11 @@
 {
-  "declinedGuests": {
-    "declinedGuests": [],
-    "confirmedGuests": []
-  },
-  "confirmedGuests": {
-    "declinedGuests": [],
-    "confirmedGuests": []
-  },
-  "guestList": {"guests": []}
+    "declinedGuests": {
+        "declinedGuests": [],
+        "confirmedGuests": []
+    },
+    "confirmedGuests": {
+        "declinedGuests": [],
+        "confirmedGuests": []
+    },
+    "guestList": {"guests": []}
 }
