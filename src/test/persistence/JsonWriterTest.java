@@ -33,14 +33,17 @@ class JsonWriterTest extends JsonTest {
             GuestList guestList = new GuestList();
             RsvpStatus confirmedGuestList = new RsvpStatus();
             RsvpStatus declinedGuestList = new RsvpStatus();
-            String filePath = "./data/testWriterEmptyGuestList.json";
-            JsonWriter writer = new JsonWriter(filePath);
+
+            JsonWriter writer = new JsonWriter("./data/testWriterEmptyGuestList.json");
+
             writer.open();
             writer.write(guestList, confirmedGuestList, declinedGuestList);
             writer.close();
 
-            JsonReader reader = new JsonReader(filePath);
+            JsonReader reader = new JsonReader("./data/testWriterEmptyGuestList.json");
+
             reader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
+
             assertNull(guestList.getListOfGuests());
             assertNull(confirmedGuestList.getConfirmedGuests());
             assertNull(declinedGuestList.getDeclinedGuests());

@@ -79,13 +79,6 @@ public class GuestList implements Writable {
         }
         return null;
     }
-//
-//    @Override
-//    public JSONObject toJson() {
-//        JSONObject json = new JSONObject();
-//        json.put("guests", guestsToJson());
-//        return json;
-//    }
 
     @Override
     public JSONObject toJson() {

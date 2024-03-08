@@ -79,17 +79,6 @@ public class RsvpStatus implements Writable {
         return null;
     }
 
-//    //REQUIRES: the guest to already have confirmed (with an RSVP status of true)
-//    //EFFECTS: removes a guest from the two lists
-//    public void removeCGuests(Guest guest) {
-//        confirmedGuests.remove(guest);
-//    }
-//
-//    //REQUIRES: the guest to already have declined invitation (with an RSVP status of false)
-//    //EFFECTS: removes a guest from the two lists
-//    public void removeDGuests(Guest guest) {
-//        declinedGuests.remove(guest);
-//    }
 
     public void removeCGuests(Guest guestToRemove) {
         Iterator<Guest> iterator = confirmedGuests.iterator();
@@ -97,7 +86,7 @@ public class RsvpStatus implements Writable {
             Guest guest = iterator.next();
             if (guest.getName().equalsIgnoreCase(guestToRemove.getName())) {
                 iterator.remove();
-                break; // Assuming names are unique, stop after finding the first match
+                break;
             }
         }
     }
@@ -108,7 +97,7 @@ public class RsvpStatus implements Writable {
             Guest guest = iterator.next();
             if (guest.getName().equalsIgnoreCase(guestToRemove.getName())) {
                 iterator.remove();
-                break; // Assuming names are unique, stop after finding the first match
+                break;
             }
         }
     }

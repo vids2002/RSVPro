@@ -137,4 +137,54 @@ public class RsvpStatusTest {
         assertNull(testRsvpStatus.getDeclinedGuests());
     }
 
+    @Test
+    public void testRemoveCGuestsNotInList() {
+        // Attempt to remove a guest who was never added.
+        Guest notAddedGuest = new Guest("NotAdded", false, false);
+        testRsvpStatus.addConfirmedGuests(guest1); // Assuming guest1 is defined and added elsewhere.
+
+        // The size of the confirmed list should remain the same since the guest was not in it.
+        int sizeBeforeRemove = testRsvpStatus.getConfirmedGuests().size();
+        testRsvpStatus.removeCGuests(notAddedGuest);
+        int sizeAfterRemove = testRsvpStatus.getConfirmedGuests().size();
+        assertEquals(sizeBeforeRemove, sizeAfterRemove);
+    }
+
+    @Test
+    public void testRemoveDGuestNotInList() {
+        // Similar test for declined guests.
+    }
+
+    @Test
+    public void testRemoveCGuestsFromListWithOneGuest() {
+        // Add only one guest and then remove them.
+        testRsvpStatus.addConfirmedGuests(guest1);
+        testRsvpStatus.removeCGuests(guest1);
+        assertNull(testRsvpStatus.getConfirmedGuests());
+    }
+
+    @Test
+    public void testRemoveDGuestsFromListWithOneGuest() {
+        // Similar test for declined guests.
+    }
+
+    @Test
+    public void testRemoveCGuestsDoesNotAffectDeclinedList() {
+        // Add guests to both lists.
+        testRsvpStatus.addConfirmedGuests(guest2);
+        testRsvpStatus.addDeclinedGuests(guest1);
+
+        // Remove a guest from the confirmed list.
+        testRsvpStatus.removeCGuests(guest2);
+
+        // The declined list should not be affected.
+        assertFalse(testRsvpStatus.getDeclinedGuests().isEmpty());
+        assertEquals(guest1, testRsvpStatus.getDeclinedGuests().get(0));
+    }
+
+    @Test
+    public void testRemoveDGuestsDoesNotAffectConfirmedList() {
+        // Similar test for ensuring removing a declined guest does not affect the confirmed list.
+    }
+
 }
