@@ -25,3 +25,7 @@ process for a wide range of events.
 - As a user, I want to be able to view the list of guests that have confirmed my invite
   and a list of guests that have declined my invite. 
 - As a user, I want to be able to view details of a specific guest
+- As a user, when I select the quit option or don't have anything else to do, I want to be given 
+  the option to save the current status of my application to file.
+- As a user, when I start the application, I want to be given the option to load my
+  Guest List from file.

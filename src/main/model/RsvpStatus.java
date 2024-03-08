@@ -1,10 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 // Represents the guests that have confirmed and the guests that have declined
-public class RsvpStatus {
+public class RsvpStatus implements Writable {
     private List<Guest> confirmedGuests;
     private List<Guest> declinedGuests;
 
@@ -74,17 +79,54 @@ public class RsvpStatus {
         return null;
     }
 
-    //REQUIRES: the guest to already have confirmed (with an RSVP status of true)
-    //EFFECTS: removes a guest from the two lists
-    public void removeCGuests(Guest guest) {
-        confirmedGuests.remove(guest);
+//    //REQUIRES: the guest to already have confirmed (with an RSVP status of true)
+//    //EFFECTS: removes a guest from the two lists
+//    public void removeCGuests(Guest guest) {
+//        confirmedGuests.remove(guest);
+//    }
+//
+//    //REQUIRES: the guest to already have declined invitation (with an RSVP status of false)
+//    //EFFECTS: removes a guest from the two lists
+//    public void removeDGuests(Guest guest) {
+//        declinedGuests.remove(guest);
+//    }
+
+    public void removeCGuests(Guest guestToRemove) {
+        Iterator<Guest> iterator = confirmedGuests.iterator();
+        while (iterator.hasNext()) {
+            Guest guest = iterator.next();
+            if (guest.getName().equalsIgnoreCase(guestToRemove.getName())) {
+                iterator.remove();
+                break; // Assuming names are unique, stop after finding the first match
+            }
+        }
     }
 
-    //REQUIRES: the guest to already have declined invitation (with an RSVP status of false)
-    //EFFECTS: removes a guest from the two lists
-    public void removeDGuests(Guest guest) {
-        declinedGuests.remove(guest);
+    public void removeDGuests(Guest guestToRemove) {
+        Iterator<Guest> iterator = declinedGuests.iterator();
+        while (iterator.hasNext()) {
+            Guest guest = iterator.next();
+            if (guest.getName().equalsIgnoreCase(guestToRemove.getName())) {
+                iterator.remove();
+                break; // Assuming names are unique, stop after finding the first match
+            }
+        }
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("confirmedGuests", guestsToJson(confirmedGuests));
+        json.put("declinedGuests", guestsToJson(declinedGuests));
+        return json;
+    }
 
+    // EFFECTS: returns guests in this Guest List as a JSON array
+    private JSONArray guestsToJson(List<Guest> guests) {
+        JSONArray jsonArray = new JSONArray();
+        for (Guest guest : guests) {
+            jsonArray.put(guest.toJson());
+        }
+        return jsonArray;
+    }
 }

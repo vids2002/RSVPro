@@ -3,24 +3,36 @@ package ui;
 import model.Guest;
 import model.GuestList;
 import model.RsvpStatus;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
-import java.sql.SQLOutput;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
 // Guest List Management Application
 public class GuestListApp {
+    private static final String JSON_STORE = "./data/guestlist.json";
     private Scanner input;
     private GuestList guestList;
     private RsvpStatus confirmedGuestList;
     private RsvpStatus declinedGuestList;
     private Guest guest;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+//    private JsonReaderRsvp jsonReaderRsvp;
+//    private JsonWriterRsvp jsonWriterRsvp;
 
     private boolean keepGoing = true;
     private boolean returnToMain = true;
 
     // EFFECTS: runs the guest list application
     public GuestListApp() {
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+//        jsonReaderRsvp = new JsonReaderRsvp(JSON_STORE_RSVP);
+//        jsonWriterRsvp = new JsonWriterRsvp(JSON_STORE_RSVP);
         runGuestListApp();
     }
 
@@ -39,7 +51,7 @@ public class GuestListApp {
             if (command.equals("q")) {
                 System.out.println("\nGoodbye!");
                 returnToMain = false;
-            } else if (command.equals("e") || (command.equals("v"))) {
+            } else if (command.equals("e") || (command.equals("v")) || command.equals("l") || command.equals("s")) {
                 processCommand(command);
             } else {
                 System.out.println("That's an invalid input");
@@ -55,6 +67,10 @@ public class GuestListApp {
             editMenuFunctions();
         } else if (command.equals("v")) {
             editViewFunctions();
+        } else if (command.equals("l")) {
+            loadGuestList();
+        } else if (command.equals("s")) {
+            saveGuestList();
         }
     }
 
@@ -243,6 +259,7 @@ public class GuestListApp {
 
     //MODIFIES this
     //EFFECTS: changes the RSVP Status of required guest
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void doChangeRsvpStatus() {
         //prompt for guest to change RSVP status
         System.out.println("Who's RSVP Status would you like to change?");
@@ -259,6 +276,14 @@ public class GuestListApp {
 
         //changing the RSVP Status of given guest (in the invited, confirmed and declined guests' lists.
         if (guestToChange != null) {
+
+            // Before changing the RSVP status, remove the guest from the opposite list
+            if (updatedStatus) {
+                declinedGuestList.removeDGuests(guestToChange);
+            } else {
+                confirmedGuestList.removeCGuests(guestToChange);
+            }
+            // Now change the RSVP Status
             guestToChange.setRsvpStatus(updatedStatus);
             if (updatedStatus) {
                 confirmedGuestList.addConfirmedGuests(guestToChange);
@@ -342,6 +367,8 @@ public class GuestListApp {
         System.out.println("\nWhat would you like to do?");
         System.out.println("\tE -> Edit GuestList");
         System.out.println("\tV -> View GuestList");
+        System.out.println("\tL -> Load GuestList");
+        System.out.println("\tS -> Save Application");
         System.out.println("\tQ -> Quit Application");
     }
 
@@ -366,4 +393,30 @@ public class GuestListApp {
         System.out.println("\tM -> Return to Main Menu");
     }
 
+    // EFFECTS: saves the Guest List to file
+    private void saveGuestList() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(guestList, confirmedGuestList, declinedGuestList);
+//            jsonWriterRsvp.write(confirmedGuestList);
+//            jsonWriter.write(declinedGuestList);
+            jsonWriter.close();
+            System.out.println("Guest List has successfully been saved to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: loads Guest List from file
+    private void loadGuestList() {
+        try {
+            jsonReader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
+//            confirmedGuestList = jsonReader.readRsvp();
+//            declinedGuestList = jsonReader.readRsvp();
+            System.out.println("Successfully loaded Guest List from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
 }

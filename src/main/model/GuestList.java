@@ -1,10 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 // Represents the list of guests that are invited to the event
-public class GuestList {
+public class GuestList implements Writable {
     private List<Guest> listOfGuests;
 
     //EFFECTS: creates an instance for this class with no guests added
@@ -74,5 +78,30 @@ public class GuestList {
             return null;
         }
         return null;
+    }
+//
+//    @Override
+//    public JSONObject toJson() {
+//        JSONObject json = new JSONObject();
+//        json.put("guests", guestsToJson());
+//        return json;
+//    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("guests", guestsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns guests in this Guest List as a JSON array
+    private JSONArray guestsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Guest guest : listOfGuests) {
+            jsonArray.put(guest.toJson());
+        }
+
+        return jsonArray;
     }
 }

@@ -1,7 +1,11 @@
 package model;
 
+
+import org.json.JSONObject;
+import persistence.Writable;
+
 // Represents a guest with a name, plusOne status and rsvpStatus that will be invited to the event
-public class Guest {
+public class Guest implements Writable {
     private String name;
     private boolean plusOne;
     private boolean rsvpStatus;
@@ -44,7 +48,7 @@ public class Guest {
     //EFFECTS: displays the guest in given format
     @Override
     public String toString() {
-        return "Guest: " + name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase()
+        return "Guest: " + name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase()
                 + "   " + "Plus One Status = "
                 + plusOne + "   " + "RSVP Status = " + rsvpStatus;
     }
@@ -58,5 +62,13 @@ public class Guest {
         return false;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("rsvpStatus", rsvpStatus);
+        json.put("plusOne", plusOne);
+        return json;
+    }
 
 }
