@@ -8,6 +8,9 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Referenced from the JsonSerialization Demo
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
 class JsonReaderTest extends JsonTest {
 
     @Test

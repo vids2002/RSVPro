@@ -4,6 +4,9 @@ package model;
 import org.json.JSONObject;
 import persistence.Writable;
 
+// Referenced from the JsonSerialization Demo
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
 // Represents a guest with a name, plusOne status and rsvpStatus that will be invited to the event
 public class Guest implements Writable {
     private String name;

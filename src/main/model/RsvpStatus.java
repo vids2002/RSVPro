@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+// Referenced from the JsonSerialization Demo
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
 // Represents the guests that have confirmed and the guests that have declined
 public class RsvpStatus implements Writable {
     private List<Guest> confirmedGuests;

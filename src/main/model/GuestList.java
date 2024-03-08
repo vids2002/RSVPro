@@ -7,6 +7,9 @@ import persistence.Writable;
 import java.util.ArrayList;
 import java.util.List;
 
+// Referenced from the JsonSerialization Demo
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
 // Represents the list of guests that are invited to the event
 public class GuestList implements Writable {
     private List<Guest> listOfGuests;

@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+// Referenced from the JsonSerialization Demo
+// https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
+
 // Guest List Management Application
 public class GuestListApp {
     private static final String JSON_STORE = "./data/guestlist.json";
