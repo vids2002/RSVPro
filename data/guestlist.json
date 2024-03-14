@@ -1,6 +1,22 @@
 {
     "declinedGuests": {
-        "declinedGuests": [],
+        "declinedGuests": [
+            {
+                "rsvpStatus": false,
+                "plusOne": false,
+                "name": "mandy"
+            },
+            {
+                "rsvpStatus": false,
+                "plusOne": true,
+                "name": "frank"
+            },
+            {
+                "rsvpStatus": false,
+                "plusOne": true,
+                "name": "mimi"
+            }
+        ],
         "confirmedGuests": []
     },
     "confirmedGuests": {
@@ -14,12 +30,7 @@
             {
                 "rsvpStatus": true,
                 "plusOne": true,
-                "name": "dia"
-            },
-            {
-                "rsvpStatus": true,
-                "plusOne": true,
-                "name": "memes"
+                "name": "dave"
             }
         ]
     },
@@ -30,14 +41,24 @@
             "name": "vids"
         },
         {
-            "rsvpStatus": true,
+            "rsvpStatus": false,
+            "plusOne": false,
+            "name": "mandy"
+        },
+        {
+            "rsvpStatus": false,
             "plusOne": true,
-            "name": "memes"
+            "name": "mimi"
         },
         {
             "rsvpStatus": true,
             "plusOne": true,
-            "name": "dia"
+            "name": "dave"
+        },
+        {
+            "rsvpStatus": false,
+            "plusOne": true,
+            "name": "frank"
         }
     ]}
 }

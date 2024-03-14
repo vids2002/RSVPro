@@ -24,8 +24,6 @@ public class GuestListApp {
     private Guest guest;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
-//    private JsonReaderRsvp jsonReaderRsvp;
-//    private JsonWriterRsvp jsonWriterRsvp;
 
     private boolean keepGoing = true;
     private boolean returnToMain = true;
@@ -78,7 +76,6 @@ public class GuestListApp {
     }
 
     //EFFECTS: allows user to access edit menu
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public void editMenuFunctions() {
         String command;
 
@@ -90,37 +87,24 @@ public class GuestListApp {
 
             if (command.equals("a")) {
                 doAddGuests();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("r")) {
                 doRemoveGuests();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("p")) {
                 doChangePOStatus();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("c")) {
                 doChangeRsvpStatus();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("l")) {
                 doClearListOfGuests();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("m")) {
                 keepGoing = false;
                 returnToMain = true;
             } else {
                 System.out.println("That's not a valid input");
-                keepGoing = true;
-                returnToMain = false;
             }
         }
     }
 
     //EFFECTS: allows user to access view menu
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public void editViewFunctions() {
         String command;
         keepGoing = true;
@@ -131,27 +115,17 @@ public class GuestListApp {
 
             if (command.equals("i")) {
                 doInvitedGuestList();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("c")) {
                 doConfirmedGuestList();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("d")) {
                 doDeclinedGuestList();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("v")) {
                 doViewGuest();
-                keepGoing = true;
-                returnToMain = false;
             } else if (command.equals("m")) {
                 keepGoing = false;
                 returnToMain = true;
             } else {
                 System.out.println("That's not a valid input");
-                keepGoing = true;
-                returnToMain = false;
             }
         }
     }
@@ -160,21 +134,22 @@ public class GuestListApp {
     //EFFECTS: adds a guest with given name, given plus one status and false RSVP Status
     private void doAddGuests() {
         boolean plusOne = false;
+        boolean keepGoingYN = true;
 
         //prompt for guests' name
         System.out.println("Please enter guest's name");
         String name = input.nextLine().trim().toLowerCase();
 
-        while (keepGoing) {
+        while (keepGoingYN) {
             //prompt for guests' initial plus one status when sending invite
             System.out.println("What would you like this guest to have a plus one?"
                     + "\ny for yes and n for no");
             String plusOneStatus = input.nextLine().trim().toLowerCase();
             if (plusOneStatus.equals("y")) {
                 plusOne = true;
-                keepGoing = false;
+                keepGoingYN = false;
             } else if (plusOneStatus.equals("n")) {
-                keepGoing = false;
+                keepGoingYN = false;
             } else {
                 System.out.println("that's an invalid input");
             }
@@ -210,8 +185,7 @@ public class GuestListApp {
         //removing the guest with given name
         if (guestToRemove != null) {
             guestList.removeGuest(guestToRemove);
-            String editNameToRemove = nameToRemove.substring(0,1).toUpperCase()
-                    + nameToRemove.substring(1).toLowerCase();
+            String editNameToRemove = formatName(nameToRemove);
             System.out.println(editNameToRemove + " was successfully removed from the Guest List");
             if (confirmedGToRemove != null) {
                 confirmedGuestList.removeCGuests(guestToRemove);
@@ -254,7 +228,6 @@ public class GuestListApp {
 
     //MODIFIES this
     //EFFECTS: changes the RSVP Status of required guest
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private void doChangeRsvpStatus() {
         //prompt for guest to change RSVP status
         System.out.println("Who's RSVP Status would you like to change?");
@@ -271,27 +244,36 @@ public class GuestListApp {
 
         //changing the RSVP Status of given guest (in the invited, confirmed and declined guests' lists.
         if (guestToChange != null) {
-
-            // Before changing the RSVP status, remove the guest from the opposite list
-            if (updatedStatus) {
-                declinedGuestList.removeDGuests(guestToChange);
-            } else {
-                confirmedGuestList.removeCGuests(guestToChange);
-            }
-            // Now change the RSVP Status
-            guestToChange.setRsvpStatus(updatedStatus);
-            if (updatedStatus) {
-                confirmedGuestList.addConfirmedGuests(guestToChange);
-            } else {
-                declinedGuestList.addDeclinedGuests(guestToChange);
-            }
-            String editName = nameToChange.substring(0,1).toUpperCase()
-                    + nameToChange.substring(1).toLowerCase();
-            System.out.println("RSVP Status of " + editName + " was successfully updated");
-            System.out.println(guestToChange);
+            removeAndChangeRsvp(updatedStatus, guestToChange, nameToChange);
         } else {
             System.out.println("That guest is not on the list. Please verify spellings.");
         }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: removes guest from opposite list before changing RSVP status
+    public void removeAndChangeRsvp(boolean updatedStatus, Guest guestToChange, String nameToChange) {
+        // Before changing the RSVP status, remove the guest from the opposite list
+        if (updatedStatus) {
+            declinedGuestList.removeDGuests(guestToChange);
+        } else {
+            confirmedGuestList.removeCGuests(guestToChange);
+        }
+        // Now change the RSVP Status
+        guestToChange.setRsvpStatus(updatedStatus);
+        if (updatedStatus) {
+            confirmedGuestList.addConfirmedGuests(guestToChange);
+        } else {
+            declinedGuestList.addDeclinedGuests(guestToChange);
+        }
+        String editName = formatName(nameToChange);
+        System.out.println("RSVP Status of " + editName + " was successfully updated");
+        System.out.println(guestToChange);
+    }
+
+    //EFFECTS: changes the format of given String name of a guest to be printed
+    private String formatName(String name) {
+        return name.substring(0,1).toUpperCase() + name.substring(1).toLowerCase();
     }
 
     //MODIFIES: this

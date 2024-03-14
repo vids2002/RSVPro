@@ -65,6 +65,7 @@ public class Guest implements Writable {
         return false;
     }
 
+    //EFFECTS: returns a Guest as a JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

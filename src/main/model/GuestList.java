@@ -83,6 +83,7 @@ public class GuestList implements Writable {
         return null;
     }
 
+    //EFFECTS: returns Guest List as a JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

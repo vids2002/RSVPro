@@ -82,7 +82,7 @@ public class RsvpStatus implements Writable {
         return null;
     }
 
-
+    //EFFECTS: removes a Confirmed Guest from the list of Confirmed Guests
     public void removeCGuests(Guest guestToRemove) {
         Iterator<Guest> iterator = confirmedGuests.iterator();
         while (iterator.hasNext()) {
@@ -94,6 +94,7 @@ public class RsvpStatus implements Writable {
         }
     }
 
+    //EFFECTS: removes a Declined Guest from the list of Declined Guests
     public void removeDGuests(Guest guestToRemove) {
         Iterator<Guest> iterator = declinedGuests.iterator();
         while (iterator.hasNext()) {
@@ -105,6 +106,7 @@ public class RsvpStatus implements Writable {
         }
     }
 
+    //EFFECTS: returns RSVP Status List as a JSON object
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
