@@ -1,64 +1,32 @@
-{
-    "declinedGuests": {
-        "declinedGuests": [
-            {
-                "rsvpStatus": false,
-                "plusOne": false,
-                "name": "mandy"
-            },
-            {
-                "rsvpStatus": false,
-                "plusOne": true,
-                "name": "frank"
-            },
-            {
-                "rsvpStatus": false,
-                "plusOne": true,
-                "name": "mimi"
-            }
-        ],
-        "confirmedGuests": []
+{"guestList": {"guests": [
+    {
+        "rsvpStatus": false,
+        "plusOne": true,
+        "name": "Mario"
     },
-    "confirmedGuests": {
-        "declinedGuests": [],
-        "confirmedGuests": [
-            {
-                "rsvpStatus": true,
-                "plusOne": true,
-                "name": "vids"
-            },
-            {
-                "rsvpStatus": true,
-                "plusOne": true,
-                "name": "dave"
-            }
-        ]
+    {
+        "rsvpStatus": false,
+        "plusOne": false,
+        "name": "Luigi"
     },
-    "guestList": {"guests": [
-        {
-            "rsvpStatus": true,
-            "plusOne": true,
-            "name": "vids"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "mandy"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "mimi"
-        },
-        {
-            "rsvpStatus": true,
-            "plusOne": true,
-            "name": "dave"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "frank"
-        }
-    ]}
-}
+    {
+        "rsvpStatus": false,
+        "plusOne": false,
+        "name": "Neil"
+    },
+    {
+        "rsvpStatus": false,
+        "plusOne": true,
+        "name": "Armstrong"
+    },
+    {
+        "rsvpStatus": false,
+        "plusOne": false,
+        "name": "Felix"
+    },
+    {
+        "rsvpStatus": false,
+        "plusOne": false,
+        "name": "Grund"
+    }
+]}}

@@ -47,7 +47,7 @@ public class GuestTest {
 
     @Test
     public void testToString() {
-        String expected = "Guest: Mimi   Plus One Status = true   RSVP Status = false";
+        String expected = "Guest: Mimi     Plus One Status = true     RSVP Status = false";
         assertEquals(expected, testGuest.toString());
     }
 

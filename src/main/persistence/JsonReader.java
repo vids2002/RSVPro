@@ -41,6 +41,7 @@ public class JsonReader {
         parseRsvpStatusList(jsonObject.getJSONObject("declinedGuests"), declinedGuestList, false);
     }
 
+
     // EFFECTS: reads source file as string and returns it
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();

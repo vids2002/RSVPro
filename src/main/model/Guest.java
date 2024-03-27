@@ -51,9 +51,34 @@ public class Guest implements Writable {
     //EFFECTS: displays the guest in given format
     @Override
     public String toString() {
-        return "Guest: " + name.substring(0, 1).toUpperCase() + name.substring(1).toLowerCase()
-                + "   " + "Plus One Status = "
-                + plusOne + "   " + "RSVP Status = " + rsvpStatus;
+        String formattedName = editName(name);
+        return "Guest: " + formattedName
+                + "     " + "Plus One Status = "
+                + plusOne + "     " + "RSVP Status = " + rsvpStatus;
+    }
+
+    //EFFECTS: edits the format of name to capitalize first letter of each name given for a guest
+    private String editName(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        StringBuilder titleCase = new StringBuilder();
+        boolean nextTitleCase = true;
+
+        for (char c : input.toCharArray()) {
+            if (Character.isSpaceChar(c)) {
+                nextTitleCase = true;
+            } else if (nextTitleCase) {
+                c = Character.toTitleCase(c);
+                nextTitleCase = false;
+            } else {
+                c = Character.toLowerCase(c);
+            }
+            titleCase.append(c);
+        }
+
+        return titleCase.toString();
     }
 
     //EFFECTS: returns a given string as a boolean value

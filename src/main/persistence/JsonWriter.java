@@ -11,6 +11,7 @@ import java.io.*;
 // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
 // Represents a writer that writes JSON representation of Guest List to file
+@SuppressWarnings({"checkstyle:LineLength", "checkstyle:SuppressWarnings"})
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
