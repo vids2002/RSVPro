@@ -1,0 +1,30 @@
+{
+    "declinedGuests": {
+        "declinedGuests": [{
+            "rsvpStatus": false,
+            "plusOne": true,
+            "name": "Alice"
+        }],
+        "confirmedGuests": []
+    },
+    "confirmedGuests": {
+        "declinedGuests": [],
+        "confirmedGuests": [{
+            "rsvpStatus": true,
+            "plusOne": false,
+            "name": "Bob"
+        }]
+    },
+    "guestList": {"guests": [
+        {
+            "rsvpStatus": false,
+            "plusOne": true,
+            "name": "Alice"
+        },
+        {
+            "rsvpStatus": true,
+            "plusOne": false,
+            "name": "Bob"
+        }
+    ]}
+}
