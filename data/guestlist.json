@@ -10,7 +10,7 @@
     "guestList": {"guests": [
         {
             "rsvpStatus": false,
-            "plusOne": true,
+            "plusOne": false,
             "name": "Vids"
         },
         {
@@ -45,7 +45,7 @@
         },
         {
             "rsvpStatus": false,
-            "plusOne": false,
+            "plusOne": true,
             "name": "Bojack"
         }
     ]}
