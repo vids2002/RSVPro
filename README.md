@@ -29,7 +29,7 @@ process for a wide range of events.
 - As a user, I want to be given the option in main menu to load my Guest List from file
 
 ## Instructions for Grader:
-![Project_Demo.gif](..%2F..%2F..%2F..%2FProject_Demo.gif)
+![GIF](data/Project_Demo.gif)
 - You can find the first required action related to the user story "adding multiple Xs to a Y"
   by pressing the "Edit Guest List" button on the Main Page and then pressing the "Add a Guest" button
 - You can find the second required action related to the user story "adding multiple Xs to a Y"
