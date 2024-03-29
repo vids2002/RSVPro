@@ -15,10 +15,15 @@ import java.io.IOException;
 import java.util.List;
 
 public class GUI extends JFrame implements ActionListener {
+    private static final String JSON_STORE = "./data/guestlist.json";
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
+    private RsvpStatus confirmedGuestList;
+    private RsvpStatus declinedGuestList;
     GuestList guestList;
-    RsvpStatus confirmedGuests;
-    RsvpStatus declinedGuests;
+
     JFrame mainFrame;
+
 
     JLabel label;
     JTextField field;
@@ -34,7 +39,9 @@ public class GUI extends JFrame implements ActionListener {
     JPanel editMenu;
     JPanel viewMenu;
 
-    JPanel addGuest;
+    JPanel addGuestPanel;
+    JPanel removeGuestPanel;
+    JPanel plusOnePanel;
 
     JButton editGL;
     JButton viewGL;
@@ -55,27 +62,29 @@ public class GUI extends JFrame implements ActionListener {
     JButton viewGInfo;
 
     JButton done;
-    JButton addGuestButton;
-
-    private static final String JSON_STORE = "./data/guestlist.json";
-    private JsonWriter jsonWriter;
-    private JsonReader jsonReader;
+    JButton changeMore;
 
     //EFFECTS: constructs a JFrame with Welcome Panel
     public GUI() {
         super("RSVPro");
+
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
+
+
         mainFrame = new JFrame();
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainFrame.setPreferredSize(new Dimension(300, 350));
 
         guestList = new GuestList();
+        confirmedGuestList = new RsvpStatus();
+        declinedGuestList = new RsvpStatus();
 
         initializeWelcomeButtons();
+        saveGL.addActionListener(e -> saveGuestListAction());
+        loadGL.addActionListener(e -> loadGuestListAction());
 
         initializePanels("Main");
-
-        jsonWriter = new JsonWriter(JSON_STORE);
-        jsonReader = new JsonReader(JSON_STORE);
     }
 
     //EFFECTS: initializes required panel depending on chosen button action and resets Main Frame
@@ -128,6 +137,12 @@ public class GUI extends JFrame implements ActionListener {
         if (menu.equals("Add")) {
             initializeAddGuestPanel();
         }
+        if (menu.equals("Remove")) {
+            initializeRemoveGuestPanel();
+        }
+//        if (menu.equals("Plus One")) {
+//            initializePlusOnePanel();
+//        }
     }
 
     //EFFECTS: initializes the edit panel
@@ -176,29 +191,71 @@ public class GUI extends JFrame implements ActionListener {
 
     //EFFECTS: initializes the add guest panel
     private void initializeAddGuestPanel() {
-        addGuest = new JPanel();
-        addGuest.setLayout(new BoxLayout(addGuest, BoxLayout.Y_AXIS));
+        addGuestPanel = new JPanel();
+        addGuestPanel.setLayout(new BoxLayout(addGuestPanel, BoxLayout.Y_AXIS));
 
         addToPanelContent("Add a new guest", "Guest's Name:", "Plus One?");
 
-        addGuestButton = new JButton("Add Guest");
+        changeMore = new JButton("Add Guest");
         done = new JButton("Done");
-        addGuestButton.addActionListener(e -> {
+        changeMore.addActionListener(e -> {
             addGuestToList(nameField.getText(), answerLabel.isSelected());
             nameField.setText("");
             answerLabel.setSelected(false);
         });
-        addGuestButton.setActionCommand("Add Guest");
+        changeMore.setActionCommand("Add Guest");
         done.setActionCommand("Edit Guest List");
         done.addActionListener(this);
-        addToEditPanel(addGuest, functionLabel, nameLabel, nameField, questionLabel, answerLabel);
-        addGuest.add(addGuestButton);
-        addGuest.add(done);
+        addToEditPanel(addGuestPanel, functionLabel, nameLabel, nameField, questionLabel, answerLabel);
+        addGuestPanel.add(changeMore);
+        addGuestPanel.add(done);
 
-        formatPanel(addGuest, 30, 30, 30, 30);
+        formatPanel(addGuestPanel, 30, 30, 30, 30);
 
-        mainFrame.add(addGuest, BorderLayout.CENTER);
+        mainFrame.add(addGuestPanel, BorderLayout.CENTER);
     }
+
+    private  void initializeRemoveGuestPanel() {
+        removeGuestPanel = new JPanel();
+        removeGuestPanel.setLayout(new BoxLayout(removeGuestPanel, BoxLayout.Y_AXIS));
+
+        removeFromPanelContent("Remove a guest", "Guest's Name");
+
+        changeMore = new JButton("Remove Guest");
+        done = new JButton("Done");
+        changeMore.addActionListener(e -> {
+            removeGuestFromList(nameField.getText());
+            nameField.setText("");
+        });
+        changeMore.setActionCommand("Remove Guest");
+        done.setActionCommand("Edit Guest List");
+        done.addActionListener(this);
+        addToRemovePanel(removeGuestPanel, functionLabel, nameLabel, nameField);
+        removeGuestPanel.add(changeMore);
+        removeGuestPanel.add(done);
+
+        formatPanel(removeGuestPanel, 30, 30, 30, 30);
+
+        mainFrame.add(removeGuestPanel, BorderLayout.CENTER);
+    }
+
+//    private void initializePlusOnePanel() {
+//        plusOnePanel = new JPanel();
+//        plusOnePanel.setLayout(new BoxLayout(plusOnePanel, BoxLayout.Y_AXIS));
+//
+//        addToPanelContent("Change Plus-One Status", "Guest's Name:", "Plus One?");
+//
+//        changeMore = new JButton("Change Plus-One Status");
+//        done = new JButton("done");
+//        changeMore.addActionListener(e -> {
+//            changePlusOneStatus(nameField.getText(), answerLabel.isSelected());
+//            nameField.setText("");
+//            answerLabel.setSelected(false);
+//        });
+//        changeMore.setActionCommand("Change ")
+//
+//
+//    }
 
     //EFFECTS: initializes labels, text field and checkbox that needs to be added to edit panels
     private void addToPanelContent(String function, String name, String question) {
@@ -209,6 +266,12 @@ public class GUI extends JFrame implements ActionListener {
         answerLabel = new JCheckBox();
     }
 
+    private void removeFromPanelContent(String function, String name) {
+        functionLabel = new JLabel(function);
+        nameLabel = new JLabel(name);
+        nameField = new JTextField(1);
+    }
+
     //EFFECTS: adds labels, text field and checkbox that needs to be added to given edit panel
     private void addToEditPanel(JPanel panel, JLabel functionLabel, JLabel nameLabel, JTextField nameField,
                                 JLabel questionLabel, JCheckBox answerLabel) {
@@ -217,6 +280,13 @@ public class GUI extends JFrame implements ActionListener {
         panel.add(nameField);
         panel.add(questionLabel);
         panel.add(answerLabel);
+    }
+
+    private void addToRemovePanel(JPanel panel, JLabel functionLabel,
+                                  JLabel nameLabel, JTextField nameField) {
+        panel.add(functionLabel);
+        panel.add(nameLabel);
+        panel.add(nameField);
     }
 
     //EFFECTS: formats the panel
@@ -232,6 +302,26 @@ public class GUI extends JFrame implements ActionListener {
         Guest newGuest = new Guest(name, plusOne, false);
         guestList.addGuest(newGuest);
         JOptionPane.showMessageDialog(mainFrame, "Following guest was added successfully:\n" + newGuest);
+    }
+
+    private void removeGuestFromList(String name) {
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+
+        Guest guestToRemove = null;
+        for (Guest guest : invitedGuests) {
+            if (guest.getName().equalsIgnoreCase(name)) {
+                guestToRemove = guest;
+                break;
+            }
+        }
+
+        if (guestToRemove != null) {
+            guestList.removeGuest(guestToRemove);
+            JOptionPane.showMessageDialog(mainFrame, name + " was successfully removed from Guest List.");
+        } else {
+            JOptionPane.showMessageDialog(mainFrame, "That guest is not on the list."
+                    + "Please verify spellings.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     //EFFECTS: view the list of invited guests
@@ -271,9 +361,9 @@ public class GUI extends JFrame implements ActionListener {
         viewGL.setActionCommand("View Guest List");
         viewGL.addActionListener(this);
         saveGL.setActionCommand("Save Guest List");
-        saveGL.addActionListener(this);
-        loadGL.setActionCommand("Load Guest List");
-        loadGL.addActionListener(this);
+//        saveGL.addActionListener(e -> saveGuestListAction());
+//        loadGL.setActionCommand("Load Guest List");
+//        loadGL.addActionListener(this);
         quitApp.setActionCommand("Quit Guest List");
         quitApp.addActionListener(this);
     }
@@ -287,13 +377,23 @@ public class GUI extends JFrame implements ActionListener {
         returnToMain = new JButton("Return To Main Menu");
     }
 
+    //EFFECTS: adds edit buttons to edit panel
     private void addEditButtons() {
         addSixButtons(editMenu, addG, removeG, changePlusOne, changeRsvp, clearGL, returnToMain);
     }
 
+    //EFFECTS: adds action to the edit buttons
     private void addActionToEditButtons() {
         addG.setActionCommand("Add Guest");
         addG.addActionListener(this);
+        removeG.setActionCommand("Remove Guest");
+        removeG.addActionListener(this);
+//        changePlusOne.setActionCommand("Change Plus-One Status");
+//        changePlusOne.addActionListener(this);
+//        changeRsvp.setActionCommand("Change RSVP Status");
+//        changeRsvp.addActionListener(this);
+//        clearGL.setActionCommand("Clear Guest List");
+//        clearGL.addActionListener(this);
         returnToMain.setActionCommand("Return To Main Menu");
         returnToMain.addActionListener(this);
     }
@@ -338,7 +438,6 @@ public class GUI extends JFrame implements ActionListener {
         panel.add(button6);
     }
 
-
     //EFFECTS: indicates what to do when a button is pressed
     /**
      * Invoked when an action occurs.
@@ -358,12 +457,14 @@ public class GUI extends JFrame implements ActionListener {
                 || command.equals("View Specific Guest's Information")) {
             doThisViewAction(command);
         }
-        if (command.equals("Load Guest List")) {
-            initializePanels("Load");
-        }
-        if (command.equals("Save Guest List")) {
-            initializePanels("Save");
-        }
+//        if (command.equals("Load Guest List")) {
+//            loadGuestListAction();
+//            initializePanels("Main");
+//        }
+//        if (command.equals("Save Guest List")) {
+//            saveGuestListAction();
+//            initializePanels("Main");
+//        }
         if (command.equals("Return To Main Menu")) {
             initializePanels("Main");
         }
@@ -409,6 +510,48 @@ public class GUI extends JFrame implements ActionListener {
             initializePanels("Information");
         }
     }
+
+    private void saveGuestListAction() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(guestList, confirmedGuestList, declinedGuestList);
+            jsonWriter.close();
+            JOptionPane.showMessageDialog(mainFrame, "Guest List has successfully been saved.");
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(mainFrame, "Unable to write to file: "
+                    + JSON_STORE, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadGuestListAction() {
+        try {
+            jsonReader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
+            JOptionPane.showMessageDialog(mainFrame, "Guest List has successfully been loaded.");
+            // Here you might want to refresh or update your GUI components to reflect the loaded data
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(mainFrame, "Unable to read from file: "
+                    + JSON_STORE, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void setupSaveAndLoadListeners() {
+        ActionListener[] saveListeners = saveGL.getActionListeners();
+        if (saveListeners.length > 0) {
+            for (ActionListener listener : saveListeners) {
+                saveGL.removeActionListener(listener);
+            }
+        }
+        saveGL.addActionListener(e -> saveGuestListAction());
+
+        ActionListener[] loadListeners = loadGL.getActionListeners();
+        if (loadListeners.length > 0) {
+            for (ActionListener listener : loadListeners) {
+                loadGL.removeActionListener(listener);
+            }
+        }
+        loadGL.addActionListener(e -> loadGuestListAction());
+    }
+
 
 
 }
