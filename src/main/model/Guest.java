@@ -58,7 +58,7 @@ public class Guest implements Writable {
     }
 
     //EFFECTS: edits the format of name to capitalize first letter of each name given for a guest
-    private String editName(String input) {
+    public String editName(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }

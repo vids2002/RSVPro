@@ -16,6 +16,7 @@ import java.util.List;
 
 public class GUI extends JFrame implements ActionListener {
     private static final String JSON_STORE = "./data/guestlist.json";
+
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
     private RsvpStatus confirmedGuestList;
@@ -67,12 +68,12 @@ public class GUI extends JFrame implements ActionListener {
     //EFFECTS: constructs a JFrame with Welcome Panel
     public GUI() {
         super("RSVPro");
-
         jsonWriter = new JsonWriter(JSON_STORE);
         jsonReader = new JsonReader(JSON_STORE);
 
 
         mainFrame = new JFrame();
+        showSplashScreen();
         mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         mainFrame.setPreferredSize(new Dimension(300, 350));
 
@@ -550,6 +551,27 @@ public class GUI extends JFrame implements ActionListener {
             }
         }
         loadGL.addActionListener(e -> loadGuestListAction());
+    }
+
+    public void showSplashScreen() {
+        JWindow splashScreen = new JWindow();
+        ImageIcon splashImage = new ImageIcon("./data/RSVProLogo.png");
+
+        splashScreen.getContentPane().add(new JLabel(splashImage));
+        splashScreen.pack();
+
+        splashScreen.setLocation(0, 0);
+
+        splashScreen.setVisible(true);
+
+        try {
+            Thread.sleep(5000); // Display the splash screen for 5 seconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        splashScreen.setVisible(false);
+        splashScreen.dispose();
     }
 
 

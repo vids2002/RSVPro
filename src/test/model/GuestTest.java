@@ -60,4 +60,20 @@ public class GuestTest {
         assertFalse(testGuest.setStatusToBoolean("N"));
 
     }
+
+    @Test
+    public void testEditNameNullInput() {
+        assertNull(testGuest.editName(null));
+    }
+
+    @Test
+    public void testEditNameEmptyInput() {
+        assertEquals("", testGuest.editName(""));
+    }
+
+    @Test
+    public void testEditNameWithSpace() {
+        assertEquals("John Doe", testGuest.editName("john doe"));
+    }
+
 }
