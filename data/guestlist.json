@@ -11,42 +11,32 @@
         {
             "rsvpStatus": false,
             "plusOne": false,
-            "name": "Vids"
+            "name": "Homer"
+        },
+        {
+            "rsvpStatus": false,
+            "plusOne": false,
+            "name": "Marge"
+        },
+        {
+            "rsvpStatus": false,
+            "plusOne": false,
+            "name": "Bart"
         },
         {
             "rsvpStatus": false,
             "plusOne": true,
-            "name": "Memes"
+            "name": "Lisa"
         },
         {
             "rsvpStatus": false,
             "plusOne": false,
-            "name": "Mario"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "Luigi"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "Anankin"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "Luke"
+            "name": "Maggie"
         },
         {
             "rsvpStatus": false,
             "plusOne": true,
             "name": "Yoda"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "Bojack"
         }
     ]}
 }
