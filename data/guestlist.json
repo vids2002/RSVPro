@@ -1,15 +1,40 @@
 {
     "declinedGuests": {
-        "declinedGuests": [],
+        "declinedGuests": [{
+            "rsvpStatus": false,
+            "plusOne": true,
+            "name": "Oscar"
+        }],
         "confirmedGuests": []
     },
     "confirmedGuests": {
         "declinedGuests": [],
-        "confirmedGuests": []
+        "confirmedGuests": [
+            {
+                "rsvpStatus": true,
+                "plusOne": false,
+                "name": "Homer"
+            },
+            {
+                "rsvpStatus": true,
+                "plusOne": true,
+                "name": "Lando"
+            },
+            {
+                "rsvpStatus": true,
+                "plusOne": true,
+                "name": "Sainz"
+            },
+            {
+                "rsvpStatus": true,
+                "plusOne": true,
+                "name": "Ricciardo"
+            }
+        ]
     },
     "guestList": {"guests": [
         {
-            "rsvpStatus": false,
+            "rsvpStatus": true,
             "plusOne": false,
             "name": "Homer"
         },
@@ -37,6 +62,26 @@
             "rsvpStatus": false,
             "plusOne": true,
             "name": "Yoda"
+        },
+        {
+            "rsvpStatus": true,
+            "plusOne": false,
+            "name": "Lando"
+        },
+        {
+            "rsvpStatus": true,
+            "plusOne": true,
+            "name": "Sainz"
+        },
+        {
+            "rsvpStatus": false,
+            "plusOne": true,
+            "name": "Oscar"
+        },
+        {
+            "rsvpStatus": true,
+            "plusOne": true,
+            "name": "Ricciardo"
         }
     ]}
 }

@@ -1,5 +1,7 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
 import model.Guest;
 import model.GuestList;
 import model.RsvpStatus;
@@ -14,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+//EFFECTS: Runs the GUI Application
 public class GUI extends JFrame implements ActionListener {
 
     //JSON Reader/Writer declarations
@@ -37,6 +40,7 @@ public class GUI extends JFrame implements ActionListener {
     JPanel addGuestPanel;
     JPanel removeGuestPanel;
     JPanel plusOnePanel;
+    JPanel rsvpPanel;
 
     //Inside Panel Declarations
     JLabel functionLabel;
@@ -110,6 +114,10 @@ public class GUI extends JFrame implements ActionListener {
         if (menu.equals("Load")) {
             initializeMainPanel();
         }
+        if (menu.equals("Quit")) {
+            printLog();
+            System.exit(0);
+        }
         resetMainFrame();
     }
 
@@ -151,6 +159,9 @@ public class GUI extends JFrame implements ActionListener {
         if (menu.equals("Plus One")) {
             initializePlusOnePanel();
         }
+        if (menu.equals("RSVP")) {
+            initializeRsvPanel();
+        }
     }
 
     //EFFECTS: initializes the edit panel
@@ -177,6 +188,12 @@ public class GUI extends JFrame implements ActionListener {
         }
         if (menu.equals("Invited")) {
             viewInvitedGuests();
+        }
+        if (menu.equals("Confirmed")) {
+            viewConfirmedGuests();
+        }
+        if (menu.equals("Declined")) {
+            viewDeclinedGuests();
         }
     }
 
@@ -274,6 +291,32 @@ public class GUI extends JFrame implements ActionListener {
         mainFrame.add(plusOnePanel, BorderLayout.CENTER);
     }
 
+    //EFFECTS: initializes the RSVP Panel
+    private void initializeRsvPanel() {
+        rsvpPanel = new JPanel();
+        rsvpPanel.setLayout(new BoxLayout(rsvpPanel, BoxLayout.Y_AXIS));
+
+        addToPanelContent("Change RSVP Status", "Guest's Name:", "RSVP?");
+
+        changeMore = new JButton("Change RSVP Status");
+        done = new JButton("Done");
+        changeMore.addActionListener(e -> {
+            changeRsvpStatus(nameField.getText(), answerLabel.isSelected());
+            nameField.setText("");
+            answerLabel.setSelected(false);
+        });
+        changeMore.setActionCommand("Change RSVP");
+        done.setActionCommand("Edit Guest List");
+        done.addActionListener(this);
+        addToEditPanel(rsvpPanel, functionLabel, nameLabel, nameField, questionLabel, answerLabel);
+        rsvpPanel.add(changeMore);
+        rsvpPanel.add(done);
+
+        formatPanel(rsvpPanel, 30, 30, 30, 30);
+
+        mainFrame.add(rsvpPanel, BorderLayout.CENTER);
+    }
+
     //EFFECTS: initializes labels, text field and checkbox that needs to be added to edit panels
     private void addToPanelContent(String function, String name, String question) {
         functionLabel = new JLabel(function);
@@ -325,19 +368,28 @@ public class GUI extends JFrame implements ActionListener {
 
     //EFFECTS: removes a given guest from the Guest List
     private void removeGuestFromList(String name) {
+        guestList.enableLogging(false);
+        confirmedGuestList.enableLogging(false);
+        declinedGuestList.enableLogging(false);
+
         List<Guest> invitedGuests = guestList.getListOfGuests();
 
-        Guest guestToRemove = null;
-        for (Guest guest : invitedGuests) {
-            if (guest.getName().equalsIgnoreCase(name)) {
-                guestToRemove = guest;
-                break;
-            }
-        }
+        Guest guestToRemove = guestList.findGuest(invitedGuests, name);
+        Guest conGuestToRemove = confirmedGuestList.findConfirmedGuest(name);
+        Guest decGuestToRemove = declinedGuestList.findDeclinedGuest(name);
+
+        guestList.enableLogging(true);
+        confirmedGuestList.enableLogging(true);
+        declinedGuestList.enableLogging(true);
 
         if (guestToRemove != null) {
             guestList.removeGuest(guestToRemove);
             JOptionPane.showMessageDialog(mainFrame, name + " was successfully removed from Guest List.");
+            if (conGuestToRemove != null) {
+                confirmedGuestList.removeCGuests(guestToRemove);
+            } else if (decGuestToRemove != null) {
+                declinedGuestList.removeDGuests(guestToRemove);
+            }
         } else {
             JOptionPane.showMessageDialog(mainFrame, "That guest is not on the list."
                     + "Please verify spellings.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -346,15 +398,11 @@ public class GUI extends JFrame implements ActionListener {
 
     //EFFECTS: changes the Plus-One Status of given guest
     private void changePlusOneStatus(String name, Boolean plusOneStatus) {
+        guestList.enableLogging(false);
         List<Guest> invitedGuests = guestList.getListOfGuests();
+        guestList.enableLogging(true);
 
-        Guest guestToChange = null;
-        for (Guest guest : invitedGuests) {
-            if (guest.getName().equalsIgnoreCase(name)) {
-                guestToChange = guest;
-                break;
-            }
-        }
+        Guest guestToChange = guestList.findGuest(invitedGuests, name);
 
         if (guestToChange != null) {
             guestToChange.setPlusOne((plusOneStatus));
@@ -363,6 +411,42 @@ public class GUI extends JFrame implements ActionListener {
         } else {
             JOptionPane.showMessageDialog(mainFrame, "That guest is not on the list."
                     + "Please verify spellings.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //EFFECTS: changes the RSVP Status of given guest
+    private void changeRsvpStatus(String name, Boolean rsvpStatus) {
+        guestList.enableLogging(false);
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+        guestList.enableLogging(true);
+
+        Guest guestToChange = guestList.findGuest(invitedGuests, name);
+
+        if (guestToChange != null) {
+            removeAndChangeRsvp(rsvpStatus, guestToChange);
+            JOptionPane.showMessageDialog(mainFrame, "The RSVP Status of "
+                    + name + " was successfully updated");
+        } else {
+            JOptionPane.showMessageDialog(mainFrame, "That guest is not on the list."
+                    + "Please verify spellings.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }
+
+    //MODIFIES: this
+    //EFFECTS: removes guest from opposite list before changing RSVP Status
+    public void removeAndChangeRsvp(boolean updatedStatus, Guest guestToChange) {
+        if (updatedStatus) {
+            declinedGuestList.removeDGuests(guestToChange);
+        } else {
+            confirmedGuestList.removeCGuests(guestToChange);
+        }
+
+        guestToChange.setRsvpStatus(updatedStatus);
+        if (updatedStatus) {
+            confirmedGuestList.addConfirmedGuests(guestToChange);
+        } else {
+            declinedGuestList.addDeclinedGuests(guestToChange);
         }
     }
 
@@ -376,6 +460,38 @@ public class GUI extends JFrame implements ActionListener {
             StringBuilder guestListString = new StringBuilder("Invited Guests:\n");
             for (Guest invitedGuest : invitedGuests) {
                 guestListString.append(invitedGuest).append("\n");
+            }
+            JOptionPane.showMessageDialog(mainFrame, guestListString.toString());
+            initializeViewPanel();
+        }
+    }
+
+    //EFFECTS: view the list of confirmed guests
+    private void viewConfirmedGuests() {
+        List<Guest> confirmedGuests = confirmedGuestList.getConfirmedGuests();
+        if (confirmedGuests == null || confirmedGuests == null || confirmedGuests.isEmpty()) {
+            JOptionPane.showMessageDialog(mainFrame, "No one has confirmed yet");
+            initializeViewPanel();
+        } else {
+            StringBuilder guestListString = new StringBuilder("Confirmed Guests: \n");
+            for (Guest confirmedGuest : confirmedGuests) {
+                guestListString.append(confirmedGuest).append("\n");
+            }
+            JOptionPane.showMessageDialog(mainFrame, guestListString.toString());
+            initializeViewPanel();
+        }
+    }
+
+    //EFFECTS: view the list of declined guests
+    private void viewDeclinedGuests() {
+        List<Guest> declinedGuests = declinedGuestList.getDeclinedGuests();
+        if (declinedGuests == null || declinedGuests == null || declinedGuests.isEmpty()) {
+            JOptionPane.showMessageDialog(mainFrame, "No one has declined yet");
+            initializeViewPanel();
+        } else {
+            StringBuilder guestListString = new StringBuilder("Declined Guests: \n");
+            for (Guest declinedGuest : declinedGuests) {
+                guestListString.append(declinedGuest).append("\n");
             }
             JOptionPane.showMessageDialog(mainFrame, guestListString.toString());
             initializeViewPanel();
@@ -429,8 +545,8 @@ public class GUI extends JFrame implements ActionListener {
         removeG.addActionListener(this);
         changePlusOne.setActionCommand("Change Plus-One Status");
         changePlusOne.addActionListener(this);
-//        changeRsvp.setActionCommand("Change RSVP Status");
-//        changeRsvp.addActionListener(this);
+        changeRsvp.setActionCommand("Change RSVP Status");
+        changeRsvp.addActionListener(this);
 //        clearGL.setActionCommand("Clear Guest List");
 //        clearGL.addActionListener(this);
         returnToMain.setActionCommand("Return To Main Menu");
@@ -451,10 +567,14 @@ public class GUI extends JFrame implements ActionListener {
         addFiveButtons(viewMenu, viewIG, viewCG, viewDG, viewGInfo, returnToMain);
     }
 
-    //EFFETCS: adds action to the view buttons
+    //EFFECTS: adds action to the view buttons
     private void addActionToViewButtons() {
         viewIG.setActionCommand("View Invited Guests");
         viewIG.addActionListener(this);
+        viewCG.setActionCommand("View Confirmed Guests");
+        viewCG.addActionListener(this);
+        viewDG.setActionCommand("View Declined Guests");
+        viewDG.addActionListener(this);
         returnToMain.setActionCommand("Return To Main Menu");
         returnToMain.addActionListener(this);
     }
@@ -501,6 +621,9 @@ public class GUI extends JFrame implements ActionListener {
         }
         if (command.equals("Return To Main Menu")) {
             initializePanels("Main");
+        }
+        if (command.equals("Quit Guest List")) {
+            initializePanels("Quit");
         }
     }
 
@@ -561,8 +684,14 @@ public class GUI extends JFrame implements ActionListener {
     //EFFECTS: loads Guest List from file
     private void loadGuestListAction() {
         try {
+            guestList.enableLogging(false);
+            confirmedGuestList.enableLogging(false);
+            declinedGuestList.enableLogging(false);
             jsonReader.readApplicationState(guestList, confirmedGuestList, declinedGuestList);
             JOptionPane.showMessageDialog(mainFrame, "Guest List has successfully been loaded.");
+            guestList.enableLogging(true);
+            confirmedGuestList.enableLogging(true);
+            declinedGuestList.enableLogging(true);
             // Here you might want to refresh or update your GUI components to reflect the loaded data
         } catch (IOException e) {
             JOptionPane.showMessageDialog(mainFrame, "Unable to read from file: "
@@ -611,5 +740,15 @@ public class GUI extends JFrame implements ActionListener {
         splashScreen.setVisible(false);
         splashScreen.dispose();
     }
+
+    //EFFECTS: prints the event lof onto the screen
+    public void printLog() {
+        EventLog log = EventLog.getInstance();
+        for (Event e : log) {
+            System.out.println(e);
+            System.out.println("\n");
+        }
+    }
+
 
 }

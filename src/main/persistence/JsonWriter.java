@@ -1,5 +1,7 @@
 package persistence;
 
+import model.Event;
+import model.EventLog;
 import model.GuestList;
 import model.RsvpStatus;
 import org.json.JSONArray;
@@ -15,6 +17,7 @@ public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;
     private String destination;
+    private boolean loggingEnabled = true;
 
     // EFFECTS: constructs writer to write to destination file
     public JsonWriter(String destination) {
@@ -39,6 +42,9 @@ public class JsonWriter {
         json.put("declinedGuests", declinedGuests.toJson()); // Adjust if your structure is different.
 
         saveToFile(json.toString(TAB));
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("Guest List was saved to file."));
+        }
     }
 
     // MODIFIES: this

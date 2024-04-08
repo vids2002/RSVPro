@@ -12,7 +12,7 @@ public class Guest implements Writable {
     private String name;
     private boolean plusOne;
     private boolean rsvpStatus;
-
+    private boolean loggingEnabled = true;
 
     // EFFECTS: creates a Guest with a name, whether their invitation allows a plus one and their RSVP status
     //          plusOne is true in the beginning
@@ -46,6 +46,9 @@ public class Guest implements Writable {
     //EFFECTS: sets the pLus one status of Guest
     public void setPlusOne(boolean updatedPlusOne) {
         this.plusOne = updatedPlusOne;
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("Guest's Plus One Status was updated."));
+        }
     }
 
     //EFFECTS: displays the guest in given format

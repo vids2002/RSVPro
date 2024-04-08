@@ -1,8 +1,6 @@
 package persistence;
 
-import model.Guest;
-import model.GuestList;
-import model.RsvpStatus;
+import model.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +16,7 @@ import org.json.*;
 // Represents a reader that reads Guest List from JSON data stored in file
 public class JsonReader {
     private String source;
+    private boolean loggingEnabled = true;
 
     // EFFECTS: constructs reader to read from source file
     public JsonReader(String source) {
@@ -29,6 +28,9 @@ public class JsonReader {
     public void readApplicationState(GuestList guestList, RsvpStatus confirmedGuestList, RsvpStatus declinedGuestList)
             throws IOException {
         String jsonData = readFile(source);
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("Guest List was loaded from file."));
+        }
         JSONObject jsonObject = new JSONObject(jsonData);
 
         // Parse Guest List

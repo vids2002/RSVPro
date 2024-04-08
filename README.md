@@ -29,7 +29,7 @@ process for a wide range of events.
 - As a user, I want to be given the option in main menu to load my Guest List from file
 
 ## Instructions for Grader:
-![GIF](data/Project_Demo.gif)
+![GIF](data/GIF_CPSC210_PROEJCT_DEMO.gif)
 - You can find the first required action related to the user story "adding multiple Xs to a Y"
   by pressing the "Edit Guest List" button on the Main Page and then pressing the "Add a Guest" button
 - You can find the second required action related to the user story "adding multiple Xs to a Y"
@@ -41,3 +41,66 @@ process for a wide range of events.
 - You can locate my visual component by starting up the application
 - You can save the state of my application by pressing the "Save Guest List" button on the main page
 - You can load the state of my application by pressing the "Load Guest List" button on the main page
+
+## Phase 4: Task 2
+- Refer to the attached demo video above: 
+    - The events that occur when the program runs as shown in the
+      demo video is as follows: 
+  
+
+            Sun Apr 07 16:10:31 PDT 2024
+            Guest List was loaded from file.
+    
+            Sun Apr 07 16:10:34 PDT 2024
+            The Invited Guest List was viewed.
+    
+            Sun Apr 07 16:10:42 PDT 2024
+            Max was added to the Guest List.
+    
+            Sun Apr 07 16:10:46 PDT 2024
+            Perez was added to the Guest List.
+            
+            Sun Apr 07 16:10:51 PDT 2024
+            Ricciardo was added to the Guest List.
+            
+            Sun Apr 07 16:10:58 PDT 2024
+            The Invited Guest List was viewed.
+
+            Sun Apr 07 16:11:02 PDT 2024
+            Confirmed Guest List was viewed.
+    
+            Sun Apr 07 16:11:04 PDT 2024
+            Declined Guest List was viewed.
+            
+            Sun Apr 07 16:11:14 PDT 2024
+            Max was removed from the Guest List.
+    
+            Sun Apr 07 16:11:18 PDT 2024
+            Perez was removed from the Guest List.
+    
+            Sun Apr 07 16:11:28 PDT 2024
+            Ricciardo's RSVP status was updated to Declined.
+    
+            Sun Apr 07 16:11:36 PDT 2024
+            Guest's Plus One Status was updated.
+    
+            Sun Apr 07 16:11:41 PDT 2024
+            Confirmed Guest List was viewed.
+            
+            Sun Apr 07 16:11:43 PDT 2024
+            Declined Guest List was viewed.
+            
+            Sun Apr 07 16:11:53 PDT 2024
+            Ricciardo's RSVP status was updated to Confirmed.
+    
+            Sun Apr 07 16:11:58 PDT 2024
+            The Invited Guest List was viewed.
+            
+            Sun Apr 07 16:12:01 PDT 2024
+            Confirmed Guest List was viewed.
+    
+            Sun Apr 07 16:12:03 PDT 2024
+            Declined Guest List was viewed.
+            
+            Sun Apr 07 16:12:07 PDT 2024
+            Guest List was saved to file.

@@ -15,6 +15,7 @@ import java.util.List;
 public class RsvpStatus implements Writable {
     private List<Guest> confirmedGuests;
     private List<Guest> declinedGuests;
+    private boolean loggingEnabled = true;
 
     // EFFECTS: creates an instance of confirmed and declined guests for this class
     public RsvpStatus() {
@@ -27,6 +28,10 @@ public class RsvpStatus implements Writable {
     //EFFECTS: adds a confirmed guest to confirmedGuests list
     public void addConfirmedGuests(Guest guest) {
         confirmedGuests.add(guest);
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event(guest.getName()
+                    + "'s RSVP status was updated to Confirmed."));
+        }
     }
 
     //REQUIRES: guest has already been identified as decline
@@ -34,12 +39,22 @@ public class RsvpStatus implements Writable {
     //EFFECTS: adds a declined guest to declinedGuests list
     public void addDeclinedGuests(Guest guest) {
         declinedGuests.add(guest);
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event(guest.getName()
+                    + "'s RSVP status was updated to Declined."));
+        }
     }
 
     //EFFECTS: returns the list of confirmed guests
     public List<Guest> getConfirmedGuests() {
         if (confirmedGuests.size() > 0) {
+            if (loggingEnabled) {
+                EventLog.getInstance().logEvent(new Event("Confirmed Guest List was viewed."));
+            }
             return confirmedGuests;
+        }
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("Confirmed Guest List was viewed."));
         }
         return null;
     }
@@ -52,7 +67,13 @@ public class RsvpStatus implements Writable {
     //EFFECTS: returns the list of declined guests
     public List<Guest> getDeclinedGuests() {
         if (declinedGuests.size() > 0) {
+            if (loggingEnabled) {
+                EventLog.getInstance().logEvent(new Event("Declined Guest List was viewed."));
+            }
             return declinedGuests;
+        }
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("Declined Guest List was viewed."));
         }
         return null;
     }
@@ -65,7 +86,7 @@ public class RsvpStatus implements Writable {
     //EFFECTS: returns a confirmed guest with given name
     public Guest findConfirmedGuest(String name) {
         for (Guest guest: confirmedGuests) {
-            if (guest.getName().equals(name)) {
+            if (guest.getName().equalsIgnoreCase(name)) {
                 return guest;
             }
         }
@@ -75,7 +96,7 @@ public class RsvpStatus implements Writable {
     //EFFECTS: returns a declined guest with given name
     public Guest findDeclinedGuest(String name) {
         for (Guest guest: declinedGuests) {
-            if (guest.getName().equals(name)) {
+            if (guest.getName().equalsIgnoreCase(name)) {
                 return guest;
             }
         }
@@ -122,5 +143,10 @@ public class RsvpStatus implements Writable {
             jsonArray.put(guest.toJson());
         }
         return jsonArray;
+    }
+
+    //EFFECTS: sets the logging status of confirmed and declined guest lists (mostly for loading and saving purposes)
+    public void enableLogging(boolean enable) {
+        this.loggingEnabled = enable;
     }
 }

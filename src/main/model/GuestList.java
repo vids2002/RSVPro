@@ -13,6 +13,7 @@ import java.util.List;
 // Represents the list of guests that are invited to the event
 public class GuestList implements Writable {
     private List<Guest> listOfGuests;
+    private boolean loggingEnabled = true;
 
     //EFFECTS: creates an instance for this class with no guests added
     public GuestList() {
@@ -24,6 +25,10 @@ public class GuestList implements Writable {
     //EFFECTS: adds a guest to list of guests
     public void addGuest(Guest guest) {
         listOfGuests.add(guest);
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event(guest.getName() + " was added to the Guest List."));
+        }
+
     }
 
     //REQUIRES: !listOfGuests empty
@@ -31,6 +36,9 @@ public class GuestList implements Writable {
     //EFFECTS: removes a guest from list of guests
     public void removeGuest(Guest guest) {
         listOfGuests.remove(guest);
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event(guest.getName() + " was removed from the Guest List."));
+        }
     }
 
     //EFFECT: returns number of guests invited to party
@@ -41,7 +49,13 @@ public class GuestList implements Writable {
     //EFFECTS: returns the list of guests invited to the party
     public List<Guest> getListOfGuests() {
         if (listOfGuests.size() > 0) {
+            if (loggingEnabled) {
+                EventLog.getInstance().logEvent(new Event("The Invited Guest List was viewed."));
+            }
             return listOfGuests;
+        }
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("The Invited Guest List was viewed."));
         }
         return null;
     }
@@ -51,6 +65,9 @@ public class GuestList implements Writable {
     //EFFECTS: clears the entire list of guests
     public void clearGuests() {
         listOfGuests.clear();
+        if (loggingEnabled) {
+            EventLog.getInstance().logEvent(new Event("The Guest List was cleared."));
+        }
     }
 
     //REQUIRES: !listOfGuests is not empty
@@ -74,7 +91,7 @@ public class GuestList implements Writable {
     public Guest findGuest(List<Guest> guests, String name) {
         if (guests != null) {
             for (Guest guest : guests) {
-                if (guest.getName().equals(name)) {
+                if (guest.getName().equalsIgnoreCase(name)) {
                     return guest;
                 }
             }
@@ -100,5 +117,10 @@ public class GuestList implements Writable {
         }
 
         return jsonArray;
+    }
+
+    //EFFECTS: sets the logging status of invited guest list (mostly for loading and saving purposes)
+    public void enableLogging(boolean enable) {
+        this.loggingEnabled = enable;
     }
 }
