@@ -109,8 +109,8 @@ process for a wide range of events.
 If I had the time, I would choose to refactor my program by implementing the Observer Design
 Pattern:
 - Subject: GuestList and RSVPStatus
-- Observer: Any classes that need to reflect changes in the subject classes (e.g: My UI classes
-  and the EventLogging class.)
+- Observer: Any classes that needs to reflect changes in the subject classes (e.g: My UI classes
+  and the EventLogging class).
 
 
 - Implementation: 
