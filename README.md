@@ -104,3 +104,21 @@ process for a wide range of events.
             
             Sun Apr 07 16:12:07 PDT 2024
             Guest List was saved to file.
+
+## Phase 4: Task 3
+If I had the time, I would choose to refactor my program by implementing the Observer Design
+Pattern:
+- Subject: GuestList and RSVPStatus
+- Observer: Any classes that need to reflect changes in the subject classes (e.g: My UI classes
+  and the EventLogging class.)
+
+
+- Implementation: 
+  - I would need to create a Subject interface and an Observer interface
+  - I would get my Subject classes (GuestList and RSVP Status) to implement the Subject
+    interface and all Observer classes to implement the Observer interface
+
+This design pattern will lead to reduced coupling between my classes because changes in 
+one part of the application can be independently handled by interested parties. In other
+words, with this pattern, the Subject classes don't need to know specifics about its observers,
+only that they implement the observable interface.
