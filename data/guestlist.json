@@ -1,87 +1,26 @@
 {
     "declinedGuests": {
-        "declinedGuests": [{
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "Oscar"
-        }],
+        "declinedGuests": [],
         "confirmedGuests": []
     },
     "confirmedGuests": {
         "declinedGuests": [],
-        "confirmedGuests": [
-            {
-                "rsvpStatus": true,
-                "plusOne": false,
-                "name": "Homer"
-            },
-            {
-                "rsvpStatus": true,
-                "plusOne": true,
-                "name": "Lando"
-            },
-            {
-                "rsvpStatus": true,
-                "plusOne": true,
-                "name": "Sainz"
-            },
-            {
-                "rsvpStatus": true,
-                "plusOne": true,
-                "name": "Ricciardo"
-            }
-        ]
+        "confirmedGuests": [{
+            "rsvpStatus": true,
+            "plusOne": true,
+            "name": "Aang"
+        }]
     },
     "guestList": {"guests": [
         {
             "rsvpStatus": true,
-            "plusOne": false,
-            "name": "Homer"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "Marge"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "Bart"
+            "plusOne": true,
+            "name": "Aang"
         },
         {
             "rsvpStatus": false,
             "plusOne": true,
-            "name": "Lisa"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": false,
-            "name": "Maggie"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "Yoda"
-        },
-        {
-            "rsvpStatus": true,
-            "plusOne": false,
-            "name": "Lando"
-        },
-        {
-            "rsvpStatus": true,
-            "plusOne": true,
-            "name": "Sainz"
-        },
-        {
-            "rsvpStatus": false,
-            "plusOne": true,
-            "name": "Oscar"
-        },
-        {
-            "rsvpStatus": true,
-            "plusOne": true,
-            "name": "Ricciardo"
+            "name": "Katara"
         }
     ]}
 }
