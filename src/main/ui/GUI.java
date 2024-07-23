@@ -41,6 +41,7 @@ public class GUI extends JFrame implements ActionListener {
     JPanel removeGuestPanel;
     JPanel plusOnePanel;
     JPanel rsvpPanel;
+    JPanel guestInfoPanel;
 
     //Inside Panel Declarations
     JLabel functionLabel;
@@ -195,6 +196,9 @@ public class GUI extends JFrame implements ActionListener {
         if (menu.equals("Declined")) {
             viewDeclinedGuests();
         }
+        if (menu.equals("Information")) {
+            initializeGuestInfoPanel();
+        }
     }
 
     //EFFECTS: initializes the view panel
@@ -333,6 +337,14 @@ public class GUI extends JFrame implements ActionListener {
         nameField = new JTextField(1);
     }
 
+    //EFFECTS: initializes labels and text field that needs to be added to guest info panel
+    private void guestInfoPanelContent(String function, String name) {
+        functionLabel = new JLabel(function);
+        nameLabel = new JLabel(name);
+        nameField = new JTextField(1);
+    }
+
+
     //EFFECTS: adds labels, text field and checkbox to edit panel
     private void addToEditPanel(JPanel panel, JLabel functionLabel, JLabel nameLabel, JTextField nameField,
                                 JLabel questionLabel, JCheckBox answerLabel) {
@@ -346,6 +358,14 @@ public class GUI extends JFrame implements ActionListener {
     //EFFECTS: adds labels adn text field to edit panel
     private void addToRemovePanel(JPanel panel, JLabel functionLabel,
                                   JLabel nameLabel, JTextField nameField) {
+        panel.add(functionLabel);
+        panel.add(nameLabel);
+        panel.add(nameField);
+    }
+
+    //EFFECTS: adds labels and text field to guest info panel
+    private void addToGuestInfoPanel(JPanel panel, JLabel functionLabel,
+                                     JLabel nameLabel, JTextField nameField) {
         panel.add(functionLabel);
         panel.add(nameLabel);
         panel.add(nameField);
@@ -498,6 +518,48 @@ public class GUI extends JFrame implements ActionListener {
         }
     }
 
+    //EFFECTS: initializes Specific Guest Panel
+    private void initializeGuestInfoPanel() {
+        guestInfoPanel = new JPanel();
+        guestInfoPanel.setLayout(new BoxLayout(guestInfoPanel, BoxLayout.Y_AXIS));
+
+        guestInfoPanelContent("A Guest's Information", "Guest's Name");
+
+        changeMore = new JButton("View Information");
+        done = new JButton("Done");
+        changeMore.addActionListener(e -> {
+            viewSpecificGuest(nameField.getText());
+            nameField.setText("");
+        });
+        changeMore.setActionCommand("View Information");
+        done.setActionCommand("View Guest List");
+        done.addActionListener(this);
+        addToGuestInfoPanel(guestInfoPanel, functionLabel, nameLabel, nameField);
+        guestInfoPanel.add(changeMore);
+        guestInfoPanel.add(done);
+
+        formatPanel(guestInfoPanel, 30, 30, 30, 30);
+
+        mainFrame.add(guestInfoPanel, BorderLayout.CENTER);
+    }
+
+    //EFFECTS: views information of a specific (given) guest
+    private void viewSpecificGuest(String name) {
+        guestList.enableLogging(false);
+        List<Guest> invitedGuests = guestList.getListOfGuests();
+
+        Guest guestToFind = guestList.findGuest(invitedGuests, name);
+
+        guestList.enableLogging(true);
+
+        if (guestToFind != null) {
+            JOptionPane.showMessageDialog(mainFrame, "Guest Information:\n" + guestToFind);
+        } else {
+            JOptionPane.showMessageDialog(mainFrame, "Guest not found. Please verify spellings and try again.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     //EFFECTS: initializes the JButtons for use in the main menu
     private void initializeWelcomeButtons() {
         editGL = new JButton("Edit Guest List");
@@ -575,6 +637,8 @@ public class GUI extends JFrame implements ActionListener {
         viewCG.addActionListener(this);
         viewDG.setActionCommand("View Declined Guests");
         viewDG.addActionListener(this);
+        viewGInfo.setActionCommand("View Specific Guest's Information");
+        viewGInfo.addActionListener(this);
         returnToMain.setActionCommand("Return To Main Menu");
         returnToMain.addActionListener(this);
     }
